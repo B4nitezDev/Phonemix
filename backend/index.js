@@ -29,6 +29,13 @@ export async function toTextEs(texto) {
   return text.replace("** ", "");
 }
 
+export async function textToSpeech(text) {
+  const model = google('models/gemini-pro')
+
+  const { text } = await generateText({
+    model: model,
+  })
+}
 
 export function clearResponse(data) {
     const regex = /(\d+): '([^']+)'/g;
@@ -56,8 +63,12 @@ export function clearResponse(data) {
 
 const app = express();
 
+app.get('/', async(req, res) => {
+  res.status(200).send('Phonemix Listen')
+})
+
 /*
- ! Body:
+ ? Body:
  *  file: @Type FileType
  *  text: @Type String
  *  language: @Type string
