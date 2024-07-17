@@ -18,9 +18,28 @@ export async function toTextEn(texto) {
 export async function toTextEs(texto) {
     const { text } = await generateText({
         model: google("models/gemini-1.5-flash-latest"),
-        maxTokens: 614,
+        maxTokens: 1000,
         system: "Eres un traductor de español a ingles profesional",
-        prompt: `Traduce el siguiente texto a ingles: ${texto}`,
+        prompt: `Traduce el siguiente texto a en/us: ${texto}`,
     });
     return text.replace("** ", "");
 }
+
+const uploadToCloudinary = async (fileBuffer, publicId) => {
+    return new Promise((resolve, reject) => {
+        const timestamp = Math.floor(new Date().getTime() / 1000); // Obtener timestamp actual en segundos
+
+        cloudinary.uploader.upload_stream({
+            public_id: publicId,
+            resource_type: 'auto',
+            timestamp: timestamp
+        }, (error, result) => {
+            if (error) {
+                console.error(error);
+                reject(error);
+            } else {
+                resolve(result);
+            }
+        }).end(fileBuffer);
+    });
+};

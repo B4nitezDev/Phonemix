@@ -2,7 +2,6 @@ import express from "express";
 import cors from "cors";
 import morgan from "morgan";
 import "dotenv/config";
-import multer from 'multer';
 import {router} from "./routes/routes.js";
 
 const app = express();
