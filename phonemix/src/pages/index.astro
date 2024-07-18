@@ -17,6 +17,14 @@
             margin: 0;
         }
 
+        main {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+            width: 100%;
+            max-width: 800px;
+        }
+
         h2 {
             color: #1DB954;
             margin-bottom: 20px;
@@ -37,7 +45,8 @@
         }
 
         input[type="file"],
-        input[type="text"] {
+        input[type="text"],
+        select {
             width: calc(100% - 22px);
             padding: 10px;
             margin-bottom: 15px;
@@ -59,7 +68,7 @@
             cursor: pointer;
             border-radius: 5px;
             transition: background-color 0.3s ease;
-            margin: 25px;
+            margin: 10px 0;
         }
 
         button:hover {
@@ -69,56 +78,86 @@
         #status {
             margin-top: 20px;
             color: #FFFFFF;
+            background-color: #222326;
+            padding: 20px;
+            border-radius: 10px;
+            width: 300px;
+            text-align: left;
         }
 
-        #userAudio {
-            margin-top: 20px;
+        .status-text {
+            margin-bottom: 10px;
         }
-        select {
-            width: calc(100% - 22px);
+
+        .audio-component {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #333;
             padding: 10px;
-            margin-bottom: 15px;
-            background-color: #535353;
-            border: none;
-            color: #FFFFFF;
-            border-radius: 5px;
+            border-radius: 10px;
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        .audio-component audio {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #1DB954;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 2s linear infinite;
+            margin: 20px auto;
+            display: none;
+        }
+
+        form,
+        #status {
+            background-color: #222326;
+            padding: 20px;
+            border-radius: 10px;
+            width: 300px;
+            text-align: left;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
 
 <h2>Subir archivo de audio a Cloudinary</h2>
+<main>
+    <form enctype="multipart/form-data" id="uploadForm">
+        <label for="expected_text">Dime qué quieres decir:</label>
+        <input type="text" id="expected_text" name="expected_text"><br><br>
+        <label for="language">En qué idioma:</label>
+        <select id="language" name="language">
+            <option value="en">Inglés</option>
+            <option value="es">Español</option>
+        </select><br><br>
+        <button type="button" id="startRecordButton" onclick="startRecording()">Iniciar grabación</button>
+        <button type="button" id="stopRecordButton" onclick="stopRecording()" style="display: none;">Detener grabación</button>
+        <button type="button" onclick="uploadAudio()">Subir archivo</button>
+    </form>
 
-<!--<form enctype="multipart/form-data" id="uploadForm">
-    <label for="file">Seleccionar archivo de audio (MP3):</label><br>
-    <input type="file" id="file" name="file"><br><br>
-    <label for="expected_text">Dime qué quieres decir:</label>
-    <input type="text" id="expected_text" name="expected_text"><br><br>
-    <label for="language">En qué idioma:</label>
-    <select id="language" name="language">
-        <option value="en">Inglés</option>
-        <option value="es">Español</option>
-    </select><br><br>
-    <button type="button" onclick="uploadAudio()">Subir archivo</button>
-</form> -->
-
-<form enctype="multipart/form-data" id="uploadForm">
-    <label for="expected_text">Dime qué quieres decir:</label>
-    <input type="text" id="expected_text" name="expected_text"><br><br>
-    <label for="language">En qué idioma:</label>
-    <select id="language" name="language">
-        <option value="en">Inglés</option>
-        <option value="es">Español</option>
-    </select><br><br>
-    <button type="button" id="startRecordButton" onclick="startRecording()">Iniciar grabación</button>
-    <button type="button" id="stopRecordButton" onclick="stopRecording()" style="display: none;">Detener grabación</button>
-    <button type="button" onclick="uploadAudio()">Subir archivo</button>
-</form>
-
-
-<div id="status"></div>
-<audio id="userAudio" controls style="display: none;"></audio>
-
+    <div id="status">
+        <div class="loader" id="loader"></div>
+        <audio id="userAudio" controls style="display: none;"></audio>
+    </div>
+</main>
 
 <script is:inline>
     let mediaRecorder;
@@ -159,6 +198,9 @@
     }
 
     function uploadAudio() {
+        const divStatus = document.getElementById('status');
+        const loader = document.getElementById('loader');
+        loader.style.display = 'block';
         const expectedTextInput = document.getElementById('expected_text');
         const languageInput = document.getElementById('language');
         const recordedBlob = new Blob(recordedChunks, { type: 'audio/webm' });
@@ -167,7 +209,7 @@
         formData.append('expected_text', expectedTextInput.value);
         formData.append('language', languageInput.value);
 
-        axios.post('http://localhost:4000/api/phonemix', formData, {
+        axios.post('http://ec2-52-8-119-197.us-west-1.compute.amazonaws.com:4000/api/phonemix', formData, {
             headers: {
                 'Content-Type': 'multipart/form-data'
             }
@@ -175,113 +217,53 @@
             .then(response => {
                 console.log('Archivo subido:', response.data);
 
-                const divStatus = document.getElementById('status');
-                divStatus.innerHTML = 'Archivo subido correctamente';
+
+                const audioComponent = document.createElement('div');
+                audioComponent.classList.add('audio-component');
 
                 const audio = document.createElement('audio');
                 audio.src = response.data.audioExpected;
+                audio.classList.add('audio-component');
                 audio.controls = true;
 
-                // Mostrar el elemento <audio> con el archivo del usuario
                 const userAudio = document.getElementById('userAudio');
-                userAudio.src = URL.createObjectURL(recordedBlob); // Crear URL del archivo grabado
-                userAudio.style.display = 'block'; // Mostrar el elemento <audio>
+                userAudio.src = URL.createObjectURL(recordedBlob);
+                userAudio.style.display = 'block';
 
-                // Crear elementos <p> para mostrar los datos
+
                 const textExpected = document.createElement('p');
-                textExpected.textContent = `Texto esperado: ${response.data.textExpected}`;
+                textExpected.classList.add('status-text');
+                textExpected.textContent = `Frase correcta: ${response.data.textExpected}`;
 
                 const textUser = document.createElement('p');
-                textUser.textContent = `Texto del usuario: ${response.data.textUser}`;
+                textUser.classList.add('status-text');
+                textUser.textContent = `Frase del usuario: ${response.data.textUser}`;
 
                 const userPhonemes = document.createElement('p');
+                userPhonemes.classList.add('status-text');
                 userPhonemes.textContent = `Fonemas del usuario: ${response.data.userPhonemes}`;
 
                 const expectedPhonemes = document.createElement('p');
-                expectedPhonemes.textContent = `Fonemas esperados: ${response.data.expectedPhonemes}`;
+                expectedPhonemes.classList.add('status-text');
+                expectedPhonemes.textContent = `Fonemas correctos: ${response.data.expectedPhonemes}`;
 
-                // Agregar elementos al DOM
-                divStatus.appendChild(textExpected);
-                divStatus.appendChild(textUser);
-                divStatus.appendChild(userPhonemes);
-                divStatus.appendChild(expectedPhonemes);
-                divStatus.appendChild(audio);
-                divStatus.appendChild(userAudio);
+                audioComponent.appendChild(textUser);
+                audioComponent.appendChild(textExpected);
+                audioComponent.appendChild(userPhonemes);
+                audioComponent.appendChild(expectedPhonemes);
+                audioComponent.appendChild(audio);
 
+                divStatus.appendChild(audioComponent);
+
+                loader.style.display = 'none';
             })
             .catch(error => {
                 console.error('Error al subir el archivo:', error);
                 document.getElementById('status').innerHTML = 'Error al subir el archivo';
+                loader.style.display = 'none';
             });
     }
 </script>
-
-<!--<script is:inline>
-
-    function uploadAudio() {
-        const fileInput = document.getElementById('file');
-        const expectedTextInput = document.getElementById('expected_text');
-        const languageInput = document.getElementById('language');
-        const file = fileInput.files[0];
-
-        if (!file) {
-            alert('Por favor selecciona un archivo de audio (MP3).');
-            return;
-        }
-
-        const formData = new FormData();
-        formData.append('file', file);
-        formData.append('expected_text', expectedTextInput.value);
-        formData.append('language', languageInput.value);
-
-        axios.post('http://localhost:4000/api/phonemix', formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            }
-        })
-            .then(response => {
-                console.log('Archivo subido:', response.data);
-
-                const divStatus = document.getElementById('status')
-                divStatus.innerHTML = 'Archivo subido correctamente ';
-
-                const audio = document.createElement('audio');
-                audio.src = response.data.audioExpected;
-                audio.controls = true;
-
-                // Mostrar el elemento <audio> con el archivo del usuario
-                const userAudio = document.getElementById('userAudio');
-                userAudio.src = URL.createObjectURL(file); // Crear URL del archivo local
-                userAudio.style.display = 'block'; // Mostrar el elemento <audio>
-
-                // Crear elementos <p> para mostrar los datos
-                const textExpected = document.createElement('p');
-                textExpected.textContent = `Texto esperado: ${response.data.textExpected}`;
-
-                const textUser = document.createElement('p');
-                textUser.textContent = `Texto del usuario: ${response.data.textUser}`;
-
-                const userPhonemes = document.createElement('p');
-                userPhonemes.textContent = `Fonemas del usuario: ${response.data.userPhonemes}`;
-
-                const expectedPhonemes = document.createElement('p');
-                expectedPhonemes.textContent = `Fonemas esperados: ${response.data.expectedPhonemes}`;
-
-                // Agregar elementos al DOM
-                divStatus.appendChild(textExpected);
-                divStatus.appendChild(textUser);
-                divStatus.appendChild(userPhonemes);
-                divStatus.appendChild(expectedPhonemes);
-                divStatus.appendChild(audio);
-                divStatus.appendChild(userAudio)
-
-            })
-            .catch(error => {
-                console.error('Error al subir el archivo:', error);
-                document.getElementById('status').innerHTML = 'Error al subir el archivo';
-            });
-    }
-</script> -->
 
 </body>
 </html>
