@@ -77,7 +77,7 @@ router.post('/phonemix', upload.single('file'), async (req, res) => {
         // Traducción del texto esperado
         let textExpected;
 
-        if (language === 'es') {
+        if (language !== 'es') {
             textExpected = await toTextEs(expected_text);
         } else {
             textExpected = await toTextEn(expected_text);
@@ -88,7 +88,7 @@ router.post('/phonemix', upload.single('file'), async (req, res) => {
         const fileBlob = new File([file.buffer], `${file.originalname}.${new Date().getTime()}`, { type: file.mimetype });
 
         formData.append('file', fileBlob);
-        formData.append('expected_text', expected_text);
+        formData.append('expected_text', textExpected);
         formData.append('language', language);
 
         // Realización de la solicitud a AWS
@@ -120,7 +120,7 @@ router.post('/phonemix', upload.single('file'), async (req, res) => {
 
         const awsUploadResult = await uploadFunction(awsFilePath)
 
-        // Preparar respuesta con URLs de los archivos subidos a Cloudinary
+        console.log(textExpected)
         const response = {
             //awsUploadedUrl: awsUploadResult.secure_url,
             textExpected,

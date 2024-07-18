@@ -10,9 +10,9 @@ export async function toTextEn(texto) {
         model: google("models/gemini-1.5-flash-latest"),
         maxTokens: 614,
         system: "Eres un traductor de ingles a español profesional",
-        prompt: `Traduce el siguiente texto a español: ${texto}`,
+        prompt: `Traduce el siguiente texto a español y devuelve solo la traduccion: ${texto}`,
     });
-    return text.replace("## ", "");
+    return text.replace("\n", "");
 }
 
 export async function toTextEs(texto) {
@@ -20,9 +20,9 @@ export async function toTextEs(texto) {
         model: google("models/gemini-1.5-flash-latest"),
         maxTokens: 1000,
         system: "Eres un traductor de español a ingles profesional",
-        prompt: `Traduce el siguiente texto a en/us: ${texto}`,
+        prompt: `Traduce el siguiente texto a en/us y devuelve solo la traduccion: ${texto}`,
     });
-    return text.replace("** ", "");
+    return text.replace("\n", "");
 }
 
 const uploadToCloudinary = async (fileBuffer, publicId) => {
