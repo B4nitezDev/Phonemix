@@ -374,6 +374,8 @@
 				expectedPhonemes.classList.add('status-text');
 				expectedPhonemes.textContent = `Fonemas correctos: ${response.data.expectedPhonemes}`;
 
+				console.log(response.data);
+
 				audioComponent.appendChild(textUser);
 				audioComponent.appendChild(textExpected);
 				audioComponent.appendChild(userPhonemes);
