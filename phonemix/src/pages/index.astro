@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
@@ -22,7 +23,6 @@
 			flex-wrap: wrap;
 			gap: 25px;
 			width: 100%;
-			//max-width: 800px;
 			height: 100%;
 		}
 
@@ -140,6 +140,44 @@
 			0% { transform: rotate(0deg); }
 			100% { transform: rotate(360deg); }
 		}
+
+
+		.info-container {
+			position: relative;
+			display: inline-block;
+			margin-left: 10px;
+		}
+
+		.info-container .info-text {
+			display: none;
+			position: absolute;
+			background-color: #333;
+			color: #FFF;
+			padding: 10px;
+			border-radius: 5px;
+			top: 100%;
+			left: 50%;
+			transform: translateX(-50%);
+			width: 200px;
+			text-align: center;
+			margin-top: 5px;
+			box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+		}
+
+		.info-container:hover .info-text {
+			display: block;
+		}
+
+		.info-container img {
+			cursor: pointer;
+			width: 24px;
+			height: 24px;
+		}
+
+		.input-with-info {
+			display: flex;
+			align-items: center;
+		}
 	</style>
 </head>
 <body>
@@ -165,22 +203,25 @@
 
 		<label for="expected_text">Dime qué quieres decir en tu idioma:</label>
 		<input type="text" id="expected_text" disabled name="expected_text">
-		<p id="error_expected_text" ></p>
+		<p id="error_expected_text"></p>
 		<br><br>
 
 		<label for="language_output">¿En qué idioma quieres hablar?</label>
-		<select id="language_output" name="language_output">
-			<option value="">Seleccione una opción</option>
-			<option value="en-us">Inglés Americano</option>
-			<option value="en-gb">Inglés Britanico</option>
-			<option value="fr-fr">Frances</option>
-			<option value="it">Italiano</option>
-			<option value="de">Aleman</option>
-			<option value="pt-pt">Portugues de Portugal</option>
-			<option value="pt-br">Portugues de Brasil</option>
-			<option value="es-la">Español de Latinoamerica</option>
-			<option value="es">Español España</option>
-		</select><br><br>
+		<div class="input-with-info">
+			<select id="language_output" name="language_output">
+				<option value="">Seleccione una opción</option>
+				<option value="en-us">Inglés Americano</option>
+				<option value="en-gb">Inglés Britanico</option>
+				<option value="fr-fr">Frances</option>
+				<option value="it">Italiano</option>
+				<option value="de">Aleman</option>
+				<option value="pt-pt">Portugues de Portugal</option>
+				<option value="pt-br">Portugues de Brasil</option>
+				<option value="es-la">Español de Latinoamerica</option>
+				<option value="es">Español España</option>
+			</select>
+		</div>
+		<br><br>
 
 		<button type="button" id="startRecordButton" onclick="startRecording()">Iniciar grabación</button>
 
@@ -189,10 +230,10 @@
 		<button type="button" id="buttonUpload" disabled onclick="uploadAudio()">Enviar</button>
 	</form>
 
-	<div id="status" style={{display: 'flex', alignItems: 'center', height: '100%'}}>
+	<div id="status" style={{display: 'flex', alignItems: 'center', height: '100%', width: '50%'}}>
 		<p>Output</p>
-		<div class="loader" id="loader"></div>
 		<audio id="userAudio" controls style="display: none;"></audio>
+		<div class="loader" id="loader"></div>
 	</div>
 </main>
 
@@ -211,7 +252,7 @@
 			expectedTextInput.disabled = false;
 		} else {
 			buttonUpload.disabled = true;
-			expectedTextInput.disabled = true
+			expectedTextInput.disabled = true;
 		}
 	});
 
@@ -221,30 +262,10 @@
 		} else {
 			buttonUpload.disabled = true;
 		}
-	});
-
-
-	expectedTextInput.addEventListener('change', () => {
-		if (expectedTextInput.value) {
-			buttonUpload.disabled = false
-		} else {
-			buttonUpload.disabled = true;
-		}
 	})
 
-	// expectedTextInput
-	let typingTimer;
-	const doneTypingInterval = 1000;
-
-	const handleInput = event => {
-		clearTimeout(typingTimer);
-		typingTimer = setTimeout(() => {
-			handleInputStop(event);
-		}, doneTypingInterval)
-	}
-
-	const handleInputStop = event => {
-		CheckLanguage()
+	function handleInput() {
+		CheckLanguage();
 	}
 
 	expectedTextInput.addEventListener('input', () => {
@@ -265,28 +286,19 @@
 			formData.append("expected_text", expectedTextInput.value);
 			axios.get(`${url_aws}?language=${languageInput.value}&expected_text=${expectedTextInput.value}`, {
 				header: {
-					"Content-Type": 'application/json',
-				},
-			}).then((response) => {
-				const data = response.data;
-				if(data.status === true) {
-					errorExpectedText.innerText = data?.message;
-					errorExpectedText.style.display = "block";
+					"Content-Type": "application/json"
 				}
-				if(data.status === false) {
-					errorExpectedText.innerText = data?.message;
-					errorExpectedText.style.display = "block";
-				}
-			}).catch(e => {
-				console.log(e);
-				errorExpectedText.innerText = "Error al validar texto"
-				errorExpectedText.style.display = "block";
 			})
-		} catch (e) {
-			console.log(e);
+				.then(response => {
+					errorExpectedText.textContent = '';
+				})
+				.catch(error => {
+					errorExpectedText.textContent = 'Error en la validación del texto.';
+				});
+		} catch (error) {
+			console.error('Error:', error);
 		}
 	}
-
 	function startRecording() {
 		navigator.mediaDevices.getUserMedia({ audio: true })
 			.then(function(stream) {
@@ -373,13 +385,33 @@
 				expectedPhonemes.classList.add('status-text');
 				expectedPhonemes.textContent = `Fonemas correctos: ${response.data.expectedPhonemes}`;
 
-				console.log(response.data);
+				const infoContainer = document.createElement('div');
+				infoContainer.classList.add('info-container');
+
+				const info = document.createElement('img')
+				info.src = '/info.svg';
+				info.alt = "info";
+
+				const infoText1 = document.createElement('p');
+				infoText1.classList.add('info-text');
+				//infoText1.textContent = response.data.optionalText.formalTranslation;
+				infoText1.textContent = "Default Text 1"
+
+				const infoText2 = document.createElement('p');
+				infoText2.classList.add('info-text');
+				infoText2.textContent = response.data.optionalText.informalTranslation;
+				//infoText2.textContent = "Default Text 2"
+
+				infoContainer.appendChild(info);
+				infoContainer.appendChild(infoText1);
+				infoContainer.appendChild(infoText2);
 
 				audioComponent.appendChild(textUser);
 				audioComponent.appendChild(textExpected);
 				audioComponent.appendChild(userPhonemes);
 				audioComponent.appendChild(expectedPhonemes);
 				audioComponent.appendChild(audio);
+				audioComponent.appendChild(infoContainer);
 
 				divStatus.appendChild(audioComponent);
 

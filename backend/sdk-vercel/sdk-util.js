@@ -20,9 +20,9 @@ export async function OptionalText(textExpected,language_input, language_output)
         model: google("models/gemini-1.5-flash-latest"),
         maxTokens: 614,
         system:  `You are a professional translator from ${language_input} to ${language_output}`,
-        prompt: `Dame 2 traducciones una formal y otra informal del siguiente texto ${textExpected} en este idioma ${language_output} y solo retorname la traduccion`,
+        prompt: `Give me 2 translations, one formal and one informal, of the following text ${textExpected} in this language ${language_output} and just return the translation`,
     })
-
+    console.log(text)
     return cleanText(text)
 }
 
@@ -39,10 +39,6 @@ function cleanText(inputText) {
     const informalMatch = inputText.match(informalPattern);
     const informalTranslation = informalMatch ? informalMatch[1].trim() : '';
 
-
     // Combine the translations into a single result
-    return {
-        formal: formalTranslation,
-        informalTranslation: informalTranslation,
-    };
+    return { formalTranslation, informalTranslation}
 }
