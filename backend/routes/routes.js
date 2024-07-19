@@ -1,6 +1,6 @@
 import express, { text } from 'express';
 import multer from "multer";
-import { toTextEn, toTextEs } from "../sdk-vercel/sdk-util.js";
+import { Translate } from "../sdk-vercel/sdk-util.js";
 import { FormData, File } from 'formdata-node';
 import fetch from "node-fetch";
 export const router = express.Router();
@@ -66,22 +66,34 @@ router.get('/', (req, res) => {
 });
 
 router.post('/phonemix', upload.single('file'), async (req, res) => {
-    if (!req.file || !req.body.expected_text || !req.body.language) {
+    if (!req.file || !req.body.expected_text || !req.body.language_output, !req.body.language_input) {
         return res.status(400).json({ message: 'Body incomplete' });
     }
 
     const file = req.file;
-    const { expected_text, language } = req.body;
+    const { expected_text, language_output, language_input } = req.body;
+
+    const languages = [
+        {key: "en-us", value: "ingles americano"},
+        {key: "en-gb", value:"ingles britanico"},
+        {key: "fr-fr", value: "frances"},
+        {key: "it", value: "italiano"},
+        {key: "de", value: "aleman"},
+        {key: "pt-pt", value: "portugues de portugal"},
+        {key: "pt-br", value: "portugues de brasil"},
+        {key: "es", value: "español de españa"},
+        {key: "es-la", value: "español de latinoamerica"}
+    ]
+
+    const isValidLanguageInput = languages.some(language => language.key === language_input);
+    const isValidLanguageOutput = languages.some(language => language.key === language_output);
+
+    if (!isValidLanguageInput || !isValidLanguageOutput) {
+        return res.status(400).json({ message: 'Invalid language input or output' });
+    }
 
     try {
-        // Traducción del texto esperado
-        let textExpected;
-
-        if (language !== 'es') {
-            textExpected = await toTextEs(expected_text);
-        } else {
-            textExpected = await toTextEn(expected_text);
-        }
+        let textExpected = await Translate(expected_text, language_input, language_output);
 
         // Preparación de datos para la solicitud a AWS
         const formData = new FormData();
@@ -89,7 +101,7 @@ router.post('/phonemix', upload.single('file'), async (req, res) => {
 
         formData.append('file', fileBlob);
         formData.append('expected_text', textExpected);
-        formData.append('language', language);
+        formData.append('language', language_output);
 
         // Realización de la solicitud a AWS
         const awsResponse = await fetch('http://ec2-52-8-119-197.us-west-1.compute.amazonaws.com:8000/feedback', {

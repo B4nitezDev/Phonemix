@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Phonemix</title>
+	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+	<style>
+		body {
+			background-color: #121212;
+			color: #FFFFFF;
+			font-family: Arial, sans-serif;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			margin: 0;
+		}
+
+		main {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 25px;
+			width: 100%;
+			//max-width: 800px;
+			height: 100%;
+		}
+
+		h2 {
+			color: #1DB954;
+			margin-bottom: 20px;
+		}
+
+		form {
+			background-color: #222326;
+			padding: 20px;
+			border-radius: 10px;
+			width: 300px;
+			text-align: left;
+			height: 80%;
+		}
+
+		label {
+			display: block;
+			margin-bottom: 10px;
+			color: #FFFFFF;
+		}
+
+		input[type="file"],
+		input[type="text"],
+		select {
+			width: calc(100% - 22px);
+			padding: 10px;
+			margin-bottom: 15px;
+			background-color: #535353;
+			border: none;
+			color: #FFFFFF;
+			border-radius: 5px;
+		}
+
+		input[type="file"] {
+			cursor: pointer;
+		}
+
+		button {
+			background-color: #1DB954;
+			color: #FFFFFF;
+			border: none;
+			padding: 10px 20px;
+			cursor: pointer;
+			border-radius: 5px;
+			transition: background-color 0.3s ease;
+			margin: 10px 0;
+		}
+
+		button:hover {
+			background-color: #1ED760;
+		}
+
+		button:disabled {
+			background-color: #555;
+			cursor: not-allowed;
+		}
+
+		#status {
+			color: #FFFFFF;
+			background-color: #222326;
+			padding: 20px;
+			border-radius: 10px;
+			width: 300px;
+			text-align: left;
+		}
+
+		.status-text {
+			margin-bottom: 10px;
+		}
+
+		.audio-component {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			background-color: #333;
+			padding: 10px;
+			border-radius: 10px;
+			margin-top: 10px;
+			width: 100%;
+		}
+
+		.audio-component audio {
+			width: 100%;
+			margin-top: 10px;
+		}
+
+		.loader {
+			border: 4px solid #f3f3f3;
+			border-top: 4px solid #1DB954;
+			border-radius: 50%;
+			width: 30px;
+			height: 30px;
+			animation: spin 2s linear infinite;
+			margin: 20px auto;
+			display: none;
+		}
+
+		form,
+		#status {
+			background-color: #222326;
+			padding: 20px;
+			border-radius: 10px;
+			width: 300px;
+			text-align: left;
+			flex-grow: 1;
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+			height: 100%;
+		}
+
+		@keyframes spin {
+			0% { transform: rotate(0deg); }
+			100% { transform: rotate(360deg); }
+		}
+	</style>
+</head>
+<body>
+
+<h2>Phonemix</h2>
+<main>
+	<form enctype="multipart/form-data" id="uploadForm">
+		<p>Dime tu idioma</p>
+		<select id="language_input" name="language_input">
+			<option value="">Seleccione una opción</option>
+			<option value="en-us">Inglés Americano</option>
+			<option value="en-gb">Inglés Britanico</option>
+			<option value="fr-fr">Frances</option>
+			<option value="it">Italiano</option>
+			<option value="de">Aleman</option>
+			<option value="pt-pt">Portugues de Portugal</option>
+			<option value="pt-br">Portugues de Brasil</option>
+			<option value="es-la">Español de Latinoamerica</option>
+			<option value="es">Español España</option>
+		</select><br><br>
+		<label for="expected_text">Dime qué quieres decir en tu idioma:</label>
+		<input type="text" id="expected_text" name="expected_text"> <br><br>
+		<label for="language_output">¿En qué idioma quieres hablar?</label>
+		<select id="language_output" name="language_output">
+			<option value="">Seleccione una opción</option>
+			<option value="en-us">Inglés Americano</option>
+			<option value="en-gb">Inglés Britanico</option>
+			<option value="fr-fr">Frances</option>
+			<option value="it">Italiano</option>
+			<option value="de">Aleman</option>
+			<option value="pt-pt">Portugues de Portugal</option>
+			<option value="pt-br">Portugues de Brasil</option>
+			<option value="es-la">Español de Latinoamerica</option>
+			<option value="es">Español España</option>
+		</select><br><br>
+		<button type="button" id="startRecordButton" onclick="startRecording()">Iniciar grabación</button>
+		<button type="button" id="stopRecordButton" onclick="stopRecording()" style="display: none;">Detener grabación</button>
+		<button type="button" id="buttonUpload" disabled onclick="uploadAudio()">Subir archivo</button>
+	</form>
+
+	<div id="status" style={{display: 'flex', alignItems: 'center', height: '100%'}}>
+		<p>Output</p>
+		<div class="loader" id="loader"></div>
+		<audio id="userAudio" controls style="display: none;"></audio>
+	</div>
+</main>
+
+<script is:inline>
+	let mediaRecorder;
+	let recordedChunks = [];
+
+	const buttonUpload = document.getElementById('buttonUpload');
+	const languageInput = document.getElementById('language_input');
+	const languageOutput = document.getElementById('language_output');
+	const expectedTextInput = document.getElementById('expected_text');
+
+	languageInput.addEventListener('change', () => {
+		if (languageInput.value) {
+			buttonUpload.disabled = false;
+		} else {
+			buttonUpload.disabled = true;
+		}
+	});
+
+	languageOutput.addEventListener('change', () => {
+		if (languageInput.value) {
+			buttonUpload.disabled = false;
+		} else {
+			buttonUpload.disabled = true;
+		}
+	});
+
+
+	expectedTextInput.addEventListener('change', () => {
+		if (expectedTextInput.value) {
+			buttonUpload.disabled = false
+		} else {
+			buttonUpload.disabled = true;
+		}
+	})
+
+
+
+	function startRecording() {
+		navigator.mediaDevices.getUserMedia({ audio: true })
+			.then(function(stream) {
+				mediaRecorder = new MediaRecorder(stream);
+				mediaRecorder.ondataavailable = function(e) {
+					recordedChunks.push(e.data);
+				};
+				mediaRecorder.onstop = function() {
+					const blob = new Blob(recordedChunks, { type: 'audio/webm' });
+					const audioURL = URL.createObjectURL(blob);
+					const userAudio = document.getElementById('userAudio');
+					userAudio.src = audioURL;
+					userAudio.style.display = 'block';
+				};
+
+				mediaRecorder.start();
+				document.getElementById('startRecordButton').style.display = 'none';
+				document.getElementById('stopRecordButton').style.display = 'block';
+				console.log('Recording started');
+			})
+			.catch(function(err) {
+				console.error('Error accessing microphone:', err);
+			});
+	}
+
+	function stopRecording() {
+		if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+			mediaRecorder.stop();
+			document.getElementById('startRecordButton').style.display = 'block';
+			document.getElementById('stopRecordButton').style.display = 'none';
+			console.log('Recording stopped');
+		}
+	}
+
+	function uploadAudio() {
+		const divStatus = document.getElementById('status');
+		const loader = document.getElementById('loader');
+		loader.style.display = 'block';
+		const expectedTextInput = document.getElementById('expected_text');
+		const languageInput = document.getElementById('language_input');
+		const languageOutput = document.getElementById('language_output');
+		const recordedBlob = new Blob(recordedChunks, { type: 'audio/webm' });
+
+		const formData = new FormData();
+		formData.append('file', recordedBlob);
+		formData.append('expected_text', expectedTextInput.value);
+		formData.append('language_input', languageInput.value);
+		formData.append('language_output', languageOutput.value);
+
+		let url_aws = "http://ec2-52-8-119-197.us-west-1.compute.amazonaws.com:4000/api/phonemix"
+		let url_local = "http://localhost:4000/api/phonemix";
+		axios.post(url_local, formData, {
+			headers: {
+				'Content-Type': 'multipart/form-data'
+			}
+		})
+			.then(response => {
+				console.log('Archivo subido:', response.data);
+
+				const audioComponent = document.createElement('div');
+				audioComponent.classList.add('audio-component');
+
+				const audio = document.createElement('audio');
+				audio.src = response.data.audioExpected;
+				audio.classList.add('audio-component');
+				audio.controls = true;
+
+				const userAudio = document.getElementById('userAudio');
+				userAudio.src = URL.createObjectURL(recordedBlob);
+				userAudio.style.display = 'block';
+
+				const textExpected = document.createElement('p');
+				textExpected.classList.add('status-text');
+				textExpected.textContent = `Frase correcta: ${response.data.textExpected}`;
+
+				const textUser = document.createElement('p');
+				textUser.classList.add('status-text');
+				textUser.textContent = `Frase del usuario: ${response.data.textUser}`;
+
+				const userPhonemes = document.createElement('p');
+				userPhonemes.classList.add('status-text');
+				userPhonemes.textContent = `Fonemas del usuario: ${response.data.userPhonemes}`;
+
+				const expectedPhonemes = document.createElement('p');
+				expectedPhonemes.classList.add('status-text');
+				expectedPhonemes.textContent = `Fonemas correctos: ${response.data.expectedPhonemes}`;
+
+				audioComponent.appendChild(textUser);
+				audioComponent.appendChild(textExpected);
+				audioComponent.appendChild(userPhonemes);
+				audioComponent.appendChild(expectedPhonemes);
+				audioComponent.appendChild(audio);
+
+				divStatus.appendChild(audioComponent);
+
+				loader.style.display = 'none';
+			})
+			.catch(error => {
+				console.error('Error al subir el archivo:', error);
+				document.getElementById('status').innerHTML = 'Error al subir el archivo';
+				loader.style.display = 'none';
+			});
+	}
+</script>
+
+</body>
+</html>
