@@ -164,8 +164,9 @@
 		</select><br><br>
 
 		<label for="expected_text">Dime qué quieres decir en tu idioma:</label>
-		<input type="text" id="expected_text" disabled name="expected_text"> <br><br>
-		<p id="error_expected_text" style="display: none;"></p>
+		<input type="text" id="expected_text" disabled name="expected_text">
+		<p id="error_expected_text" ></p>
+		<br><br>
 
 		<label for="language_output">¿En qué idioma quieres hablar?</label>
 		<select id="language_output" name="language_output">
@@ -250,23 +251,36 @@
 		handleInput();
 	})
 
-	function CheckLanguage() {
+	async function CheckLanguage() {
 		try {
 			const errorExpectedText = document.getElementById('error_expected_text');
+			const languageInput = document.getElementById('language_input');
+			const expectedTextInput = document.getElementById('expected_text');
 
-			axios.post('', {
+			let url_aws = "http://ec2-52-8-119-197.us-west-1.compute.amazonaws.com:8000/langvalidation"
+
+			let formData = new FormData();
+
+			formData.append("language", languageInput.value);
+			formData.append("expected_text", expectedTextInput.value);
+			axios.get(`${url_aws}?language=${languageInput.value}&expected_text=${expectedTextInput.value}`, {
 				header: {
 					"Content-Type": 'application/json',
 				},
-				body: JSON.stringify({
-					expected_text: expectedTextInput,
-					expected_lang: languageInput,
-				}),
 			}).then((response) => {
-				console.log(response.data);
+				const data = response.data;
+				if(data.status === true) {
+					errorExpectedText.innerText = data?.message;
+					errorExpectedText.style.display = "block";
+				}
+				if(data.status === false) {
+					errorExpectedText.innerText = data?.message;
+					errorExpectedText.style.display = "block";
+				}
 			}).catch(e => {
 				console.log(e);
-				errorExpectedText.innerHTML = "Error al validar texto"
+				errorExpectedText.innerText = "Error al validar texto"
+				errorExpectedText.style.display = "block";
 			})
 		} catch (e) {
 			console.log(e);
@@ -324,7 +338,7 @@
 
 		let url_aws = "http://ec2-52-8-119-197.us-west-1.compute.amazonaws.com:4000/api/phonemix"
 		let url_local = "http://localhost:4000/api/phonemix";
-		axios.post(url_local, formData, {
+		axios.post(url_aws, formData, {
 			headers: {
 				'Content-Type': 'multipart/form-data'
 			}
