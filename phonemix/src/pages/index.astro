@@ -5,7 +5,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Phonemix</title>
 	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-	<style>
+	<style is:inline>
 		body {
 			background-color: #121212;
 			color: #FFFFFF;
@@ -143,8 +143,10 @@
 	</style>
 </head>
 <body>
-
-<h2>Phonemix</h2>
+<header style="display: flex; justify-content: center; flex-wrap: wrap">
+	<h2>Phonemix</h2>
+	<img src="../../public/logo.jpg" width="50px" height="50px" style="border-radius: 50%; padding: 15px"/>
+</header>
 <main>
 	<form enctype="multipart/form-data" id="uploadForm">
 		<p>Dime tu idioma</p>
@@ -160,8 +162,11 @@
 			<option value="es-la">Español de Latinoamerica</option>
 			<option value="es">Español España</option>
 		</select><br><br>
+
 		<label for="expected_text">Dime qué quieres decir en tu idioma:</label>
-		<input type="text" id="expected_text" name="expected_text"> <br><br>
+		<input type="text" id="expected_text" disabled name="expected_text"> <br><br>
+		<p id="error_expected_text" style="display: none;"></p>
+
 		<label for="language_output">¿En qué idioma quieres hablar?</label>
 		<select id="language_output" name="language_output">
 			<option value="">Seleccione una opción</option>
@@ -175,9 +180,12 @@
 			<option value="es-la">Español de Latinoamerica</option>
 			<option value="es">Español España</option>
 		</select><br><br>
+
 		<button type="button" id="startRecordButton" onclick="startRecording()">Iniciar grabación</button>
+
 		<button type="button" id="stopRecordButton" onclick="stopRecording()" style="display: none;">Detener grabación</button>
-		<button type="button" id="buttonUpload" disabled onclick="uploadAudio()">Subir archivo</button>
+
+		<button type="button" id="buttonUpload" disabled onclick="uploadAudio()">Enviar</button>
 	</form>
 
 	<div id="status" style={{display: 'flex', alignItems: 'center', height: '100%'}}>
@@ -199,8 +207,10 @@
 	languageInput.addEventListener('change', () => {
 		if (languageInput.value) {
 			buttonUpload.disabled = false;
+			expectedTextInput.disabled = false;
 		} else {
 			buttonUpload.disabled = true;
+			expectedTextInput.disabled = true
 		}
 	});
 
@@ -221,7 +231,47 @@
 		}
 	})
 
+	// expectedTextInput
+	let typingTimer;
+	const doneTypingInterval = 1000;
 
+	const handleInput = event => {
+		clearTimeout(typingTimer);
+		typingTimer = setTimeout(() => {
+			handleInputStop(event);
+		}, doneTypingInterval)
+	}
+
+	const handleInputStop = event => {
+		CheckLanguage()
+	}
+
+	expectedTextInput.addEventListener('input', () => {
+		handleInput();
+	})
+
+	function CheckLanguage() {
+		try {
+			const errorExpectedText = document.getElementById('error_expected_text');
+
+			axios.post('', {
+				header: {
+					"Content-Type": 'application/json',
+				},
+				body: JSON.stringify({
+					expected_text: expectedTextInput,
+					expected_lang: languageInput,
+				}),
+			}).then((response) => {
+				console.log(response.data);
+			}).catch(e => {
+				console.log(e);
+				errorExpectedText.innerHTML = "Error al validar texto"
+			})
+		} catch (e) {
+			console.log(e);
+		}
+	}
 
 	function startRecording() {
 		navigator.mediaDevices.getUserMedia({ audio: true })
@@ -274,7 +324,7 @@
 
 		let url_aws = "http://ec2-52-8-119-197.us-west-1.compute.amazonaws.com:4000/api/phonemix"
 		let url_local = "http://localhost:4000/api/phonemix";
-		axios.post(url_aws, formData, {
+		axios.post(url_local, formData, {
 			headers: {
 				'Content-Type': 'multipart/form-data'
 			}
