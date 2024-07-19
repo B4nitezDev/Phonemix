@@ -1,6 +1,6 @@
 import express, { text } from 'express';
 import multer from "multer";
-import { Translate, Optional } from "../sdk-vercel/sdk-util.js";
+import {Translate, OptionalText} from "../sdk-vercel/sdk-util.js";
 import { FormData, File } from 'formdata-node';
 import fetch from "node-fetch";
 export const router = express.Router();
@@ -120,7 +120,7 @@ router.post('/phonemix', upload.single('file'), async (req, res) => {
             return res.status(400).json({ message: 'Invalid audio data from AWS' });
         }
 
-        const ResponseOptional = await Optional(expected_text,language_input, language_input)
+        const ResponseOptional = await OptionalText(expected_text,language_input, language_input)
 
         // Guardar archivo decodificado de AWS
         const outputDir = path.join(__dirname, 'temp');
