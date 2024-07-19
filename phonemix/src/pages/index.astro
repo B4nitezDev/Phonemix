@@ -335,7 +335,6 @@
 		formData.append('expected_text', expectedTextInput.value);
 		formData.append('language_input', languageInput.value);
 		formData.append('language_output', languageOutput.value);
-
 		let url_aws = "http://ec2-52-8-119-197.us-west-1.compute.amazonaws.com:4000/api/phonemix"
 		let url_local = "http://localhost:4000/api/phonemix";
 		axios.post(url_aws, formData, {
@@ -373,6 +372,8 @@
 				const expectedPhonemes = document.createElement('p');
 				expectedPhonemes.classList.add('status-text');
 				expectedPhonemes.textContent = `Fonemas correctos: ${response.data.expectedPhonemes}`;
+
+				console.log(response.data);
 
 				audioComponent.appendChild(textUser);
 				audioComponent.appendChild(textExpected);

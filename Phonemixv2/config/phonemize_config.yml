@@ -1,0 +1,53 @@
+# phonemize config
+
+default_language: en-us
+default_language_sr: en-US
+default_tld: com
+
+backend: espeak
+
+language_map_sr: 
+  en-us: en-US
+  en-gb: en-GB
+  fr-fr: fr-FR
+  it: it-IT
+  de: de-DE
+  pt-pt: pt-PT
+  pt-br: pt-BR
+  es: es-ES
+  es-la: es-AR
+
+language_map_t2s:
+  en-us: en-us
+  en-gb: en-uk
+  fr-fr: fr
+  it: it
+  de: de
+  pt-pt: pt
+  pt-br: pt-br
+  es: es
+  es-la: es-ar
+
+tld_map_t2s:
+  br: com.br # brasil (pt)
+  pt: pt # portugal (pt)
+  ar: com.ar # argentina (es)
+  us: us # united states (en)
+  uk: co.uk # united kingdom (en)
+
+lang_validation:
+  es: es
+  es: es-la
+  en: en-us
+  en: en-gb
+  fr: fr-fr
+  de: de
+  it: it
+  pt: pt-pt
+  pt: pt-br
+
+  
+unknownvalueerror: Google Speech Recognition could not understand audio
+
+requesterror: Could not request results from Google Speech Recognition service
+
