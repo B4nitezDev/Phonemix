@@ -17,7 +17,7 @@ app.use(morgan('dev'));
 /*
     Produccion:*/
     const corsOptions = {
-    origin: 'https://phonemix.vercel.app/',
+    origin: 'https://phonemix.vercel.app',
     optionsSuccessStatus: 200
 };
 
@@ -35,7 +35,7 @@ const limiter = rateLimit({
     max: 25,
     message: 'Too many requests from this IP, please try again later.'
 });
-//app.use(limiter);
+app.use(limiter);
 
 /*
 app.use('/api/', [
