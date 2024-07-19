@@ -274,7 +274,7 @@
 
 		let url_aws = "http://ec2-52-8-119-197.us-west-1.compute.amazonaws.com:4000/api/phonemix"
 		let url_local = "http://localhost:4000/api/phonemix";
-		axios.post(url_local, formData, {
+		axios.post(url_aws, formData, {
 			headers: {
 				'Content-Type': 'multipart/form-data'
 			}
