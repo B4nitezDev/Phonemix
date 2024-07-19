@@ -15,11 +15,11 @@ export async function Translate(textTranslate, language_input, language_output) 
     return text.replace("\n", "");
 }
 
-export async function OptionalText(text,language_input, language_output) {
+export async function OptionalText(textExpected,language_input, language_output) {
     const {text} = await generateText({
         model: google("models/gemini-1.5-flash-latest"),
         maxTokens: 614,
         system:  `You are a professional translator from ${language_input} to ${language_output}`,
-        prompt: `Dame 2 traducciones una formal y otra informal del siguiente texto ${text} en este idioma ${language_output} y solo retorname la traduccion`,
+        prompt: `Dame 2 traducciones una formal y otra informal del siguiente texto ${textExpected} en este idioma ${language_output} y solo retorname la traduccion`,
     })
 }
