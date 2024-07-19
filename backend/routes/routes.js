@@ -134,7 +134,7 @@ router.post('/phonemix', upload.single('file'), async (req, res) => {
 
         const awsUploadResult = await uploadFunction(awsFilePath)
 
-        console.log(textExpected)
+        console.log(ResponseOptional)
         const response = {
             //awsUploadedUrl: awsUploadResult.secure_url,
             textExpected,

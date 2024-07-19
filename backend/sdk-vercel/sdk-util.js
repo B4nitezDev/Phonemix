@@ -22,4 +22,27 @@ export async function OptionalText(textExpected,language_input, language_output)
         system:  `You are a professional translator from ${language_input} to ${language_output}`,
         prompt: `Dame 2 traducciones una formal y otra informal del siguiente texto ${textExpected} en este idioma ${language_output} y solo retorname la traduccion`,
     })
+
+    return cleanText(text)
+}
+
+function cleanText(inputText) {
+    // Regex patterns to match the formal and informal translations
+    const formalPattern = /## Formal Translation:\s*> ([^#]*)/;
+    const informalPattern = /## Informal Translation:\s*> ([^#]*)/;
+
+    // Extract the formal translation
+    const formalMatch = inputText.match(formalPattern);
+    const formalTranslation = formalMatch ? formalMatch[1].trim() : '';
+
+    // Extract the informal translation
+    const informalMatch = inputText.match(informalPattern);
+    const informalTranslation = informalMatch ? informalMatch[1].trim() : '';
+
+
+    // Combine the translations into a single result
+    return {
+        formal: formalTranslation,
+        informalTranslation: informalTranslation,
+    };
 }
