@@ -419,6 +419,7 @@
 				loader.style.display = 'none';
 			})
 			.catch(error => {
+				error.detail === "Error: Low volume audio detected. Please speak louder." && console.log(error)
 				console.error('Error al subir el archivo:', error);
 				document.getElementById('status').innerHTML = 'Error al subir el archivo';
 				loader.style.display = 'none';
