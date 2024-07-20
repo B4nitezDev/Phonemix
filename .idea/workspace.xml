@@ -4,7 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="385c852c-d0a8-45d4-84dd-d1ec8b212027" name="Changes" comment="Manejo de errores y arreglo de estilos">
+    <list default="true" id="385c852c-d0a8-45d4-84dd-d1ec8b212027" name="Changes" comment="Arreglo responsive">
+      <change afterPath="$PROJECT_DIR$/phonemix/public/microphone.svg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/phonemix/src/pages/index.astro" beforeDir="false" afterPath="$PROJECT_DIR$/phonemix/src/pages/index.astro" afterDir="false" />
     </list>
@@ -132,7 +133,7 @@
       <workItem from="1721391713535" duration="17692000" />
       <workItem from="1721414077160" duration="7000" />
       <workItem from="1721416728824" duration="444000" />
-      <workItem from="1721467268945" duration="7240000" />
+      <workItem from="1721467268945" duration="7826000" />
     </task>
     <task id="LOCAL-00001" summary="Agrego web">
       <option name="closed" value="true" />
@@ -254,7 +255,15 @@
       <option name="project" value="LOCAL" />
       <updated>1721469065884</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="Arreglo responsive">
+      <option name="closed" value="true" />
+      <created>1721492014755</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1721492014755</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -273,6 +282,7 @@
     <MESSAGE value="fix" />
     <MESSAGE value="Frase opcional" />
     <MESSAGE value="Manejo de errores y arreglo de estilos" />
-    <option name="LAST_COMMIT_MESSAGE" value="Manejo de errores y arreglo de estilos" />
+    <MESSAGE value="Arreglo responsive" />
+    <option name="LAST_COMMIT_MESSAGE" value="Arreglo responsive" />
   </component>
 </project>
