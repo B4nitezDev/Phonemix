@@ -141,11 +141,20 @@
 			100% { transform: rotate(360deg); }
 		}
 
+		.info-container-child {
+			align-items: center;
+			display: flex;
+			flex-wrap: wrap;
+			gap: 10px;
+			color: white;
+		}
 
 		.info-container {
-			position: relative;
-			display: inline-block;
+			//position: relative;
+			display: flex;
 			margin-left: 10px;
+			flex-wrap: wrap;
+			margin-bottom: 10px;
 		}
 
 		.info-container .info-text {
@@ -389,6 +398,12 @@
 				const infoContainer = document.createElement('div');
 				infoContainer.classList.add('info-container');
 
+				const infoContainerChild = document.createElement('div');
+				infoContainerChild.classList.add('info-container-child')
+
+				const Example = document.createElement("p")
+				Example.innerText = "Mas informal";
+
 				const info = document.createElement('img')
 				info.src = '/info.svg';
 				info.alt = "info";
@@ -399,13 +414,16 @@
 				infoText1.textContent = "Default Text 1"
 
 				const infoText2 = document.createElement('p');
-				infoText2.classList.add('info-text');
+				//infoText2.classList.add('info-text');
 				infoText2.textContent = response.data.optionalText.informalTranslation;
 				//infoText2.textContent = "Default Text 2"
 
-				infoContainer.appendChild(info);
+				infoContainerChild.appendChild(info);
+				infoContainerChild.appendChild(Example);
+				infoContainerChild.appendChild(infoText2)
+				infoContainer.appendChild(infoContainerChild);
 				infoContainer.appendChild(infoText1);
-				infoContainer.appendChild(infoText2);
+				// infoContainer.appendChild(infoText2);
 
 				audioComponent.appendChild(textUser);
 				audioComponent.appendChild(textExpected);

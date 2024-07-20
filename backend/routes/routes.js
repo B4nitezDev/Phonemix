@@ -92,6 +92,10 @@ router.post('/phonemix', upload.single('file'), async (req, res) => {
         return res.status(400).json({ message: 'Invalid language input or output' });
     }
 
+    if (!file.buffer || file.buffer.length === 0) {
+        return res.status(400).json({ message: 'File is empty' });
+    }
+
     try {
         let textExpected = await Translate(expected_text, language_input, language_output);
 
