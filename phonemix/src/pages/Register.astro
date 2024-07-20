@@ -1,0 +1,175 @@
+---
+// src/pages/register.astro
+
+---
+<html>
+<head>
+    <title>Register</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: #121212;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: #FFFFFF;
+        }
+
+        .container {
+           // background-color: #1DB954;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            width: 350px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #FFFFFF;
+            margin-bottom: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        label {
+            text-align: left;
+            margin-bottom: 5px;
+            color: #FFFFFF;
+        }
+
+        input {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            background-color: #535353;
+            color: #FFFFFF;
+        }
+
+        input:focus {
+            outline: none;
+            border: 2px solid #1DB954;
+        }
+
+        button {
+            padding: 10px;
+            background-color: #1DB954;
+            color: #FFFFFF;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #1ED760;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Register</h1>
+    <form>
+        <label for="username">Username: </label>
+        <input type="text" id="username" name="username" required />
+        <div id="username-error" class="error"></div>
+
+        <label for="email">Email: </label>
+        <input type="email" id="email" name="email" required />
+        <div id="email-error" class="error"></div>
+
+        <label for="password">Password: </label>
+        <input type="password" id="password" name="password" required />
+        <div id="password-error" class="error"></div>
+
+    </form>
+    <button onclick="handleSubmit()" type="submit">Register</button>
+</div>
+
+<script is:inline>
+    const $username = document.getElementById('username');
+    const $email = document.getElementById('email');
+    const $password = document.getElementById('password');
+
+    function validateForm () {
+        let isValid = true;
+
+        document.getElementById('username-error').textContent = '';
+        document.getElementById('email-error').textContent = '';
+        document.getElementById('password-error').textContent = '';
+
+        if ($username.value.trim() === '') {
+            document.getElementById('username-error').textContent = 'Username is required';
+            isValid = false;
+        }
+
+        const regexEmail = /^(([^<>()\[\]\\.,;:\s@”]+(\.[^<>()\[\]\\.,;:\s@”]+)*)|(“.+”))@((\[[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}])|(([a-zA-Z\-0–9]+\.)+[a-zA-Z]{2,}))$/
+        if ($email.value.trim() === '') {
+            document.getElementById('email-error').textContent = 'Email is required';
+            isValid = false;
+        } else if (!regexEmail.test($email.value.trim())) {
+            document.getElementById('email-error').textContent = 'Email is invalid';
+            isValid = false;
+        }
+
+        const password = $password.value;
+        if (password.length < 8) {
+            document.getElementById('password-error').textContent = 'Password must be at least 8 characters';
+            isValid = false;
+        } else if (!/[a-z]/.test(password)) {
+            document.getElementById('password-error').textContent = 'Password must include at least one lowercase letter';
+            isValid = false;
+        } else if (!/[A-Z]/.test(password)) {
+            document.getElementById('password-error').textContent = 'Password must include at least one uppercase letter';
+            isValid = false;
+        } else if (!/[0-9]/.test(password)) {
+            document.getElementById('password-error').textContent = 'Password must include at least one digit';
+            isValid = false;
+        } else if (!/[!@#$%^&*()_+{}\[\]:;"'<>,.?~\\/-]/.test(password)) {
+            document.getElementById('password-error').textContent = 'Password must include at least one special character';
+            isValid = false;
+        }
+
+        return isValid;
+    }
+
+    const handleSubmit = async (event) => {
+        if (!validateForm()) {
+            alert('Please fix form')
+            return;
+        }
+        const formData = new FormData();
+        formData.append('username', $username)
+        formData.append('email', $email)
+        formData.append('password', $password)
+        const data = Object.fromEntries(formData.entries());
+
+        try {
+            const response = await fetch('http://localhost:4000/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            });
+
+            if (response.ok) {
+                alert('User registered successfully');
+            } else {
+                const errorData = await response.json();
+                alert(`Error registering user: ${errorData.error}`);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
+</script>
+</body>
+</html>

@@ -6,11 +6,17 @@ import rateLimit from "express-rate-limit";
 import { body, validationResult } from 'express-validator';
 import "dotenv/config";
 import { router } from "./routes/routes.js";
+import mongoose from "mongoose";
+import bodyParser from "body-parser";
+import {User} from "./models/User.js";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 const app = express();
 
 app.use(helmet());
 app.use(express.json());
+app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 
@@ -24,11 +30,26 @@ app.use(morgan('dev'));
 
 /* Develop*/
 const corsOptions = {
-    origin: 'http://localhost:4321',
+    origin: '*',
     optionsSuccessStatus: 200
 };
 
 app.use(cors(corsOptions));
+
+mongoose.connect("mongodb://mongo:mBeLxAEDmyHKlFfaFNRKurVuamoAZbWp@roundhouse.proxy.rlwy.net:23470", {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+}).then(() => {
+    console.log('Connected to MongoDB');
+}).catch((error) => {
+    console.error('Connection error:', error.message);
+});
+
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', () => {
+    console.log('Connected to MongoDB');
+});
 
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000,
@@ -36,6 +57,44 @@ const limiter = rateLimit({
     message: 'Too many requests from this IP, please try again later.'
 });
 app.use(limiter);
+
+app.post('/register', async (req, res) => {
+    const { username, email, password } = req.body;
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+        return res.status(400).json({ error: 'El usuario ya existe' });
+    }
+
+    try {
+        const newUser = new User({ username, email, password });
+        await newUser.save();
+        res.status(201).send({ message: 'User registered successfully' });
+    } catch (error) {
+        res.status(400).send({ error: 'Error registering user' });
+    }
+});
+
+app.post('/login', async (req, res) => {
+    const { email, password } = req.body;
+
+    try {
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(400).json({ error: 'Credenciales inválidas' });
+        }
+
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+            return res.status(400).json({ error: 'Credenciales inválidas' });
+        }
+
+        const token = jwt.sign({ id: user._id }, process.env.SEED_JWT, { expiresIn: '1h' });
+
+        res.json({ token });
+    } catch (error) {
+        res.status(500).json({ error: 'Error al iniciar sesión' });
+    }
+});
 
 /*
 app.use('/api/', [
