@@ -7,6 +7,9 @@
 	<title>Phonemix</title>
 	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 	<style is:inline>
+		::-webkit-scrollbar {
+			display: none;
+		}
 		body {
 			background-color: #121212;
 			color: #FFFFFF;
@@ -26,6 +29,22 @@
 			height: 100%;
 		}
 
+		/* Media Query para tablets */
+		@media screen and (min-width: 540px) and (max-width: 1028px) {
+			main {
+				display: flex;
+				flex-direction: column;
+				flex-wrap: nowrap;
+				align-items: center;
+				justify-content: center;
+			}
+
+			form, #status {
+				width: 90%;
+				height: auto;
+				margin-bottom: 20px;
+			}
+		}
 		h2 {
 			color: #1DB954;
 			margin-bottom: 20px;
@@ -87,8 +106,9 @@
 			background-color: #222326;
 			padding: 20px;
 			border-radius: 10px;
-			width: 300px;
+			//width: 300px;
 			text-align: left;
+			overflow: hidden;
 		}
 
 		.status-text {
@@ -127,13 +147,11 @@
 			background-color: #222326;
 			padding: 20px;
 			border-radius: 10px;
-			width: 300px;
 			text-align: left;
 			flex-grow: 1;
 			display: flex;
 			flex-direction: column;
 			justify-content: space-between;
-			height: 100%;
 		}
 
 		@keyframes spin {
@@ -173,19 +191,12 @@
 			box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 		}
 
-		.info-container:hover .info-text {
-			display: block;
-		}
-
-		.info-container img {
-			cursor: pointer;
-			width: 24px;
-			height: 24px;
-		}
-
-		.input-with-info {
+		#status {
 			display: flex;
 			align-items: center;
+			height: 550px; /* Ajusta según tus necesidades */
+			width: 25%;
+			overflow-y: auto; /* Habilita el desplazamiento vertical */
 		}
 	</style>
 </head>
@@ -196,7 +207,7 @@
 </header>
 <main>
 	<form enctype="multipart/form-data" id="uploadForm">
-		<p>Dime tu idioma</p>
+		<p>Dime tu idioma:</p>
 		<select id="language_input" name="language_input">
 			<option value="">Seleccione una opción</option>
 			<option value="en-us">Inglés Americano</option>
@@ -239,7 +250,7 @@
 		<button type="button" id="buttonUpload" disabled onclick="uploadAudio()">Enviar</button>
 	</form>
 
-	<div id="status" style={{display: 'flex', alignItems: 'center', height: '100%', width: '50%'}}>
+	<div id="status">
 		<p>Output</p>
 		<audio id="userAudio" controls style="display: none;"></audio>
 		<div class="loader" id="loader"></div>
@@ -402,28 +413,24 @@
 				infoContainerChild.classList.add('info-container-child')
 
 				const Example = document.createElement("p")
-				Example.innerText = "Mas informal";
+				Example.innerText = "Frases ejemplo:";
 
-				const info = document.createElement('img')
-				info.src = '/info.svg';
-				info.alt = "info";
 
 				const infoText1 = document.createElement('p');
 				infoText1.classList.add('info-text');
-				//infoText1.textContent = response.data.optionalText.formalTranslation;
-				infoText1.textContent = "Default Text 1"
+				infoText1.textContent = response.data.optionalText.formalTranslation;
+				//infoText1.textContent = "Default Text 1"
 
 				const infoText2 = document.createElement('p');
 				//infoText2.classList.add('info-text');
-				infoText2.textContent = response.data.optionalText.informalTranslation;
+				infoText2.textContent = response.data?.optionalText?.informalTranslation;
 				//infoText2.textContent = "Default Text 2"
 
-				infoContainerChild.appendChild(info);
 				infoContainerChild.appendChild(Example);
 				infoContainerChild.appendChild(infoText2)
 				infoContainer.appendChild(infoContainerChild);
 				infoContainer.appendChild(infoText1);
-				// infoContainer.appendChild(infoText2);
+				infoContainer.appendChild(infoText2);
 
 				audioComponent.appendChild(textUser);
 				audioComponent.appendChild(textExpected);
