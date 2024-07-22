@@ -35,7 +35,7 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-mongoose.connect(process.env.DB_URL, {
+mongoose.connect("mongodb://mongo:mBeLxAEDmyHKlFfaFNRKurVuamoAZbWp@roundhouse.proxy.rlwy.net:23470", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 }).then(() => {

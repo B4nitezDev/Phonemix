@@ -67,7 +67,7 @@ async def pronunciation_feedback(file: UploadFile = File(...), expected_text: st
         print(f"Error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
     
-@app.post("/langvalidation/")
+@app.get("/langvalidation/")
 async def language_validation(expected_text: str, language: str):
     try:
         is_valid, validation_message = validate_language(expected_text, language)
