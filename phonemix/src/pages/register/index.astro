@@ -152,7 +152,10 @@
         const data = Object.fromEntries(formData.entries());
 
         try {
-            const response = await fetch('http://localhost:4000/register', {
+            const local_url = "http://localhost:4000/api/user/register";
+            const aws_url = "http://ec2-52-8-119-197.us-west-1.compute.amazonaws.com:4000/api/user/register"
+
+            const response = await fetch(aws_url, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

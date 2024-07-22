@@ -4,10 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="385c852c-d0a8-45d4-84dd-d1ec8b212027" name="Changes" comment="Login y registro">
-      <change afterPath="$PROJECT_DIR$/backend/routes/user.js" afterDir="false" />
+    <list default="true" id="385c852c-d0a8-45d4-84dd-d1ec8b212027" name="Changes" comment="Modularizo registro">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/phonemix/src/pages/Login.astro" beforeDir="false" afterPath="$PROJECT_DIR$/phonemix/src/pages/login/index.astro" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/phonemix/src/pages/Register.astro" beforeDir="false" afterPath="$PROJECT_DIR$/phonemix/src/pages/register/index.astro" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,6 +56,10 @@
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\B4nitez\Desktop\Projects\Phonemix\phonemix\src\assets" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\B4nitez\Desktop\Projects\Phonemix\phonemix\src\pages\register" />
+      <recent name="C:\Users\B4nitez\Desktop\Projects\Phonemix\phonemix\src\pages\login" />
     </key>
   </component>
   <component name="RunManager" selected="npm.dev (1)">
@@ -135,7 +139,7 @@
       <workItem from="1721414077160" duration="7000" />
       <workItem from="1721416728824" duration="444000" />
       <workItem from="1721467268945" duration="12858000" />
-      <workItem from="1721655083310" duration="2553000" />
+      <workItem from="1721655083310" duration="2842000" />
     </task>
     <task id="LOCAL-00001" summary="Agrego web">
       <option name="closed" value="true" />
@@ -289,7 +293,15 @@
       <option name="project" value="LOCAL" />
       <updated>1721657932822</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="Modularizo registro">
+      <option name="closed" value="true" />
+      <created>1721658122624</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1721658122624</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -311,6 +323,7 @@
     <MESSAGE value="Arreglo responsive" />
     <MESSAGE value="Animacion al grabar" />
     <MESSAGE value="Login y registro" />
-    <option name="LAST_COMMIT_MESSAGE" value="Login y registro" />
+    <MESSAGE value="Modularizo registro" />
+    <option name="LAST_COMMIT_MESSAGE" value="Modularizo registro" />
   </component>
 </project>
