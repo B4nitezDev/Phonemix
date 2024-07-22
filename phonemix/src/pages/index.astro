@@ -375,6 +375,10 @@
 	}
 
 	function uploadAudio() {
+		if(document.getElementById('info-container')) {
+			document.body.removeChild(document.getElementById('info-container'))
+		}
+
 		const divStatus = document.getElementById('status');
 		const loader = document.getElementById('loader');
 		loader.style.display = 'block';
@@ -429,6 +433,7 @@
 
 				const infoContainer = document.createElement('div');
 				infoContainer.classList.add('info-container');
+				infoContainer.id =  "info-container"
 
 				const infoContainerChild = document.createElement('div');
 				infoContainerChild.classList.add('info-container-child')
@@ -478,8 +483,11 @@
 					}
 				})
 				.then(response => {
-				console.log('Archivo subido:', response.data);
 
+				console.log('Archivo subido:', response.data);
+				if(document.getElementById('info-container')) {
+					document.body.removeChild(document.getElementById('info-container'))
+				}
 				const audioComponent = document.createElement('div');
 				audioComponent.classList.add('audio-component');
 
@@ -510,6 +518,7 @@
 
 				const infoContainer = document.createElement('div');
 				infoContainer.classList.add('info-container');
+				infoContainer.id = "info-container"
 
 				const infoContainerChild = document.createElement('div');
 				infoContainerChild.classList.add('info-container-child')

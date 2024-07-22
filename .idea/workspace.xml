@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="385c852c-d0a8-45d4-84dd-d1ec8b212027" name="Changes" comment="Ajusto codigo de registro">
+    <list default="true" id="385c852c-d0a8-45d4-84dd-d1ec8b212027" name="Changes" comment="Ajusto request del index">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/phonemix/src/pages/index.astro" beforeDir="false" afterPath="$PROJECT_DIR$/phonemix/src/pages/index.astro" afterDir="false" />
     </list>
@@ -138,7 +138,7 @@
       <workItem from="1721414077160" duration="7000" />
       <workItem from="1721416728824" duration="444000" />
       <workItem from="1721467268945" duration="12858000" />
-      <workItem from="1721655083310" duration="3215000" />
+      <workItem from="1721655083310" duration="4188000" />
     </task>
     <task id="LOCAL-00001" summary="Agrego web">
       <option name="closed" value="true" />
@@ -308,7 +308,15 @@
       <option name="project" value="LOCAL" />
       <updated>1721658478061</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="Ajusto request del index">
+      <option name="closed" value="true" />
+      <created>1721658892207</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1721658892207</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -332,6 +340,7 @@
     <MESSAGE value="Login y registro" />
     <MESSAGE value="Modularizo registro" />
     <MESSAGE value="Ajusto codigo de registro" />
-    <option name="LAST_COMMIT_MESSAGE" value="Ajusto codigo de registro" />
+    <MESSAGE value="Ajusto request del index" />
+    <option name="LAST_COMMIT_MESSAGE" value="Ajusto request del index" />
   </component>
 </project>
