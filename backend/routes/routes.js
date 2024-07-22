@@ -12,7 +12,12 @@ import {uploadFunction} from "../cloudinary/cloudinary.js";
 import {decodeBase64Audio} from "../utils/decode64.js";
 import {languageValidate} from "../utils/LanguageValidate.js";
 import {VoiceResponse} from "../models/VoiceResponse.js";
+import {fileURLToPath} from 'url';
 
+const __filename = fileURLToPath(import.meta.url);
+
+// 👇️ "/home/john/Desktop/javascript"
+const __dirname = path.dirname(__filename);
 
 // Configuración de Multer
 const storage = multer.memoryStorage();

@@ -1,8 +1,11 @@
 import {generateText} from "ai";
 import {createGoogleGenerativeAI} from "@ai-sdk/google";
+import * as dotenv from "dotenv";
+
+dotenv.config();
 
 const google = createGoogleGenerativeAI({
-    apiKey: process.env.API_KEY,
+    apiKey: "AIzaSyDXcbVRFPNuqw-WEZs-z6vivXC6U7vU1P8",
 });
 
 export async function Translate(textTranslate, language_input, language_output) {
@@ -27,18 +30,18 @@ export async function OptionalText(textExpected,language_input, language_output)
 }
 
 function cleanText(inputText) {
-    // Regex patterns to match the formal and informal translations
-    const formalPattern = /## Formal Translation:\s*> ([^#]*)/;
-    const informalPattern = /## Informal Translation:\s*> ([^#]*)/;
-
-    // Extract the formal translation
-    const formalMatch = inputText.match(formalPattern);
-    const formalTranslation = formalMatch ? formalMatch[1].trim() : '';
-
-    // Extract the informal translation
-    const informalMatch = inputText.match(informalPattern);
-    const informalTranslation = informalMatch ? informalMatch[1].trim() : '';
-
-    // Combine the translations into a single result
-    return { formalTranslation, informalTranslation}
+	    // Regex patterns to match the formal and informal translations
+	 const formalPattern = /## Formal Translation:\s*> ([^#]*)/;
+         const informalPattern = /## Informal Translation:\s*> ([^#]*)/;
+	
+             // Extract the formal translation
+	const formalMatch = inputText.match(formalPattern);
+        const formalTranslation = formalMatch ? formalMatch[1].trim() : '';
+	//
+        // Extract the informal translation
+        const informalMatch = inputText.match(informalPattern);
+	const informalTranslation = informalMatch ? informalMatch[1].trim() : '';
+	
+        // Combine the translations into a single result
+        return { formalTranslation, informalTranslation};
 }
