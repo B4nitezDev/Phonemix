@@ -375,10 +375,6 @@
 	}
 
 	function uploadAudio() {
-		if(document.getElementById('info-container')) {
-			document.body.removeChild(document.getElementById('info-container'))
-		}
-
 		const divStatus = document.getElementById('status');
 		const loader = document.getElementById('loader');
 		loader.style.display = 'block';
@@ -395,6 +391,7 @@
 		let url_aws = "http://ec2-52-8-119-197.us-west-1.compute.amazonaws.com:4000/api/phonemix"
 		let url_local = "http://localhost:4000/api/phonemix";
 		if(!window.localStorage.getItem('token')) {
+			document.getElementById('status').innerHTML = '';
 			axios.post(url_aws, formData, {
 				headers: {
 					'Content-Type': 'multipart/form-data'
@@ -476,6 +473,7 @@
 				loader.style.display = 'none';
 				});
 		} else {
+			document.getElementById('status').innerHTML = '';
 			axios.post(url_aws, formData, {
 				headers: {
 					'Content-Type': 'multipart/form-data',
