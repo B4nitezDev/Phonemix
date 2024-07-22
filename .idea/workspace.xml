@@ -4,10 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="385c852c-d0a8-45d4-84dd-d1ec8b212027" name="Changes" comment="Modularizo registro">
+    <list default="true" id="385c852c-d0a8-45d4-84dd-d1ec8b212027" name="Changes" comment="Ajusto codigo de registro">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/phonemix/src/pages/Login.astro" beforeDir="false" afterPath="$PROJECT_DIR$/phonemix/src/pages/login/index.astro" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/phonemix/src/pages/Register.astro" beforeDir="false" afterPath="$PROJECT_DIR$/phonemix/src/pages/register/index.astro" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/phonemix/src/pages/index.astro" beforeDir="false" afterPath="$PROJECT_DIR$/phonemix/src/pages/index.astro" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -139,7 +138,7 @@
       <workItem from="1721414077160" duration="7000" />
       <workItem from="1721416728824" duration="444000" />
       <workItem from="1721467268945" duration="12858000" />
-      <workItem from="1721655083310" duration="2842000" />
+      <workItem from="1721655083310" duration="3215000" />
     </task>
     <task id="LOCAL-00001" summary="Agrego web">
       <option name="closed" value="true" />
@@ -301,7 +300,15 @@
       <option name="project" value="LOCAL" />
       <updated>1721658122624</updated>
     </task>
-    <option name="localTasksCounter" value="21" />
+    <task id="LOCAL-00021" summary="Ajusto codigo de registro">
+      <option name="closed" value="true" />
+      <created>1721658478061</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1721658478061</updated>
+    </task>
+    <option name="localTasksCounter" value="22" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -324,6 +331,7 @@
     <MESSAGE value="Animacion al grabar" />
     <MESSAGE value="Login y registro" />
     <MESSAGE value="Modularizo registro" />
-    <option name="LAST_COMMIT_MESSAGE" value="Modularizo registro" />
+    <MESSAGE value="Ajusto codigo de registro" />
+    <option name="LAST_COMMIT_MESSAGE" value="Ajusto codigo de registro" />
   </component>
 </project>

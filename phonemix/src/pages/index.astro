@@ -390,12 +390,13 @@
 		formData.append('language_output', languageOutput.value);
 		let url_aws = "http://ec2-52-8-119-197.us-west-1.compute.amazonaws.com:4000/api/phonemix"
 		let url_local = "http://localhost:4000/api/phonemix";
-		axios.post(url_aws, formData, {
-			headers: {
-				'Content-Type': 'multipart/form-data'
-			}
-		})
-			.then(response => {
+		if(!window.localStorage.getItem('token')) {
+			axios.post(url_aws, formData, {
+				headers: {
+					'Content-Type': 'multipart/form-data'
+					}
+				})
+				.then(response => {
 				console.log('Archivo subido:', response.data);
 
 				const audioComponent = document.createElement('div');
@@ -462,13 +463,95 @@
 				divStatus.appendChild(audioComponent);
 
 				loader.style.display = 'none';
-			})
-			.catch(error => {
+				})
+				.catch(error => {
 				error.detail === "Error: Low volume audio detected. Please speak louder." && console.log(error)
 				console.error('Error al subir el archivo:', error);
 				document.getElementById('status').innerHTML = 'Error al subir el archivo';
 				loader.style.display = 'none';
-			});
+				});
+		} else {
+			axios.post(url_aws, formData, {
+				headers: {
+					'Content-Type': 'multipart/form-data',
+					"Authorization": `Bearer ${localStorage.getItem('token')}`
+					}
+				})
+				.then(response => {
+				console.log('Archivo subido:', response.data);
+
+				const audioComponent = document.createElement('div');
+				audioComponent.classList.add('audio-component');
+
+				const audio = document.createElement('audio');
+				audio.src = response.data.audioExpected;
+				audio.classList.add('audio-component');
+				audio.controls = true;
+
+				const userAudio = document.getElementById('userAudio');
+				userAudio.src = URL.createObjectURL(recordedBlob);
+				userAudio.style.display = 'block';
+
+				const textExpected = document.createElement('p');
+				textExpected.classList.add('status-text');
+				textExpected.textContent = `Frase correcta: ${response.data.textExpected}`;
+
+				const textUser = document.createElement('p');
+				textUser.classList.add('status-text');
+				textUser.textContent = `Frase del usuario: ${response.data.textUser}`;
+
+				const userPhonemes = document.createElement('p');
+				userPhonemes.classList.add('status-text');
+				userPhonemes.textContent = `Fonemas del usuario: ${response.data.userPhonemes}`;
+
+				const expectedPhonemes = document.createElement('p');
+				expectedPhonemes.classList.add('status-text');
+				expectedPhonemes.textContent = `Fonemas correctos: ${response.data.expectedPhonemes}`;
+
+				const infoContainer = document.createElement('div');
+				infoContainer.classList.add('info-container');
+
+				const infoContainerChild = document.createElement('div');
+				infoContainerChild.classList.add('info-container-child')
+
+				const Example = document.createElement("p")
+				Example.innerText = "Frases ejemplo:";
+
+
+				const infoText1 = document.createElement('p');
+				infoText1.classList.add('info-text');
+				infoText1.textContent = response.data.optionalText.formalTranslation;
+				//infoText1.textContent = "Default Text 1"
+
+				const infoText2 = document.createElement('p');
+				//infoText2.classList.add('info-text');
+				infoText2.textContent = response.data?.optionalText?.informalTranslation;
+				//infoText2.textContent = "Default Text 2"
+
+				infoContainerChild.appendChild(Example);
+				infoContainerChild.appendChild(infoText2)
+				infoContainer.appendChild(infoContainerChild);
+				infoContainer.appendChild(infoText1);
+				infoContainer.appendChild(infoText2);
+
+				audioComponent.appendChild(textUser);
+				audioComponent.appendChild(textExpected);
+				audioComponent.appendChild(userPhonemes);
+				audioComponent.appendChild(expectedPhonemes);
+				audioComponent.appendChild(audio);
+				audioComponent.appendChild(infoContainer);
+
+				divStatus.appendChild(audioComponent);
+
+				loader.style.display = 'none';
+				})
+				.catch(error => {
+				error.detail === "Error: Low volume audio detected. Please speak louder." && console.log(error)
+				console.error('Error al subir el archivo:', error);
+				document.getElementById('status').innerHTML = 'Error al subir el archivo';
+				loader.style.display = 'none';
+				});
+			}
 	}
 </script>
 
