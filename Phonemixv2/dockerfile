@@ -1,0 +1,19 @@
+FROM python:3.9-slim
+
+# Instalar ffmpeg
+RUN apt-get update && apt-get install -y ffmpeg
+
+# Configurar el directorio de trabajo
+WORKDIR /app
+
+# Copiar el contenido del proyecto al contenedor
+COPY . /app/
+
+# Instalar las dependencias
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Exponer el puerto 8000
+EXPOSE 8000
+
+# Comando para iniciar la aplicación
+CMD ["uvicorn", "app:app", "--reload", "--port", "8000", "--host", "phonemix-model.up.railway.app"]
