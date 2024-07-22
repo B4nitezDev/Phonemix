@@ -146,9 +146,9 @@
             return;
         }
         const formData = new FormData();
-        formData.append('username', $username)
-        formData.append('email', $email)
-        formData.append('password', $password)
+        formData.append('username', $username.value)
+        formData.append('email', $email.value)
+        formData.append('password', $password.value)
         const data = Object.fromEntries(formData.entries());
 
         try {

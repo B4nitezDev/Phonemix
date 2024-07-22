@@ -4,16 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="385c852c-d0a8-45d4-84dd-d1ec8b212027" name="Changes" comment="Animacion al grabar">
-      <change afterPath="$PROJECT_DIR$/backend/models/User.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/phonemix/src/pages/Login.astro" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/phonemix/src/pages/Register.astro" afterDir="false" />
+    <list default="true" id="385c852c-d0a8-45d4-84dd-d1ec8b212027" name="Changes" comment="Login y registro">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/backend/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/backend/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/routes/routes.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/routes/routes.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/phonemix/src/pages/index.astro" beforeDir="false" afterPath="$PROJECT_DIR$/phonemix/src/pages/index.astro" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/models/User.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/models/User.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/phonemix/src/pages/Login.astro" beforeDir="false" afterPath="$PROJECT_DIR$/phonemix/src/pages/Login.astro" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/phonemix/src/pages/Register.astro" beforeDir="false" afterPath="$PROJECT_DIR$/phonemix/src/pages/Register.astro" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -140,7 +136,8 @@
       <workItem from="1721391713535" duration="17692000" />
       <workItem from="1721414077160" duration="7000" />
       <workItem from="1721416728824" duration="444000" />
-      <workItem from="1721467268945" duration="12769000" />
+      <workItem from="1721467268945" duration="12858000" />
+      <workItem from="1721655083310" duration="2309000" />
     </task>
     <task id="LOCAL-00001" summary="Agrego web">
       <option name="closed" value="true" />
@@ -278,7 +275,15 @@
       <option name="project" value="LOCAL" />
       <updated>1721492597135</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="Login y registro">
+      <option name="closed" value="true" />
+      <created>1721497628209</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1721497628209</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -299,6 +304,7 @@
     <MESSAGE value="Manejo de errores y arreglo de estilos" />
     <MESSAGE value="Arreglo responsive" />
     <MESSAGE value="Animacion al grabar" />
-    <option name="LAST_COMMIT_MESSAGE" value="Animacion al grabar" />
+    <MESSAGE value="Login y registro" />
+    <option name="LAST_COMMIT_MESSAGE" value="Login y registro" />
   </component>
 </project>

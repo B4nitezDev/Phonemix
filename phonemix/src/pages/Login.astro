@@ -98,8 +98,10 @@
     document.getElementById('login-form').addEventListener('submit', async (event) => {
         event.preventDefault();
 
-        const formData = new FormData(event.target);
-        const data = Object.fromEntries(formData.entries());
+        const $email = document.getElementById('email');
+        const $password = document.getElementById('password');
+
+        const data = {password: $password.value, email: $email.value}
 
         try {
             const response = await fetch('http://localhost:4000/login', {
@@ -112,7 +114,9 @@
 
             if (response.ok) {
                 const responseData = await response.json();
-                localStorage.setItem('token', responseData.token);
+                if (responseData?.token !== undefined ) {
+                    localStorage.setItem('token', responseData.token);
+                }
                 alert('Inicio de sesión exitoso');
             } else {
                 const errorData = await response.json();
