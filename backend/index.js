@@ -19,23 +19,23 @@ app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 
-/*
-    Produccion:
-    const corsOptions = {
+
+    //Produccion:
+const corsOptions = {
     origin: 'https://phonemix.vercel.app',
     optionsSuccessStatus: 200
 };
-*/
 
-/* Develop*/
+
+/* Develop
 const corsOptions = {
     origin: '*',
     optionsSuccessStatus: 200
-};
+};*/
 
 app.use(cors(corsOptions));
 
-mongoose.connect("mongodb://mongo:mBeLxAEDmyHKlFfaFNRKurVuamoAZbWp@roundhouse.proxy.rlwy.net:23470", {
+mongoose.connect(process.env.DB_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 }).then(() => {

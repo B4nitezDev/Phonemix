@@ -15,7 +15,7 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins="*",
+    allow_origins=["https://phonemix.vercel.app", "https://phonemix.up.railway.app"],
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -81,4 +81,4 @@ async def language_validation(expected_text: str, language: str):
 
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="ec2-52-8-119-197.us-west-1.compute.amazonaws.com", port=8000)
+    uvicorn.run(app, host="phonemix-model.up.railway.app")
