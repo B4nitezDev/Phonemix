@@ -81,4 +81,4 @@ async def language_validation(expected_text: str, language: str):
 
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="phonemix-model.up.railway.app")
+    uvicorn.run(app, host="https://phonemix-model.up.railway.app")
