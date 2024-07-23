@@ -316,7 +316,7 @@
 			const languageInput = document.getElementById('language_input');
 			const expectedTextInput = document.getElementById('expected_text');
 
-			let url_aws = "http://ec2-52-8-119-197.us-west-1.compute.amazonaws.com:8000/langvalidation"
+			let url_aws = "https://phonemix-model.up.railway.app/langvalidation"
 
 			let formData = new FormData();
 
@@ -388,7 +388,7 @@
 		formData.append('expected_text', expectedTextInput.value);
 		formData.append('language_input', languageInput.value);
 		formData.append('language_output', languageOutput.value);
-		let url_aws = "http://ec2-52-8-119-197.us-west-1.compute.amazonaws.com:4000/api/phonemix"
+		let url_aws = "https://phonemix.up.railway.app/api/phonemix"
 		let url_local = "http://localhost:4000/api/phonemix";
 		if(!window.localStorage.getItem('token')) {
 			document.getElementById('status').innerHTML = '';

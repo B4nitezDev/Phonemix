@@ -1,12 +1,14 @@
 [build]
 command = """
-apt-get update && apt-get install -y software-properties-common 
-add-apt-repository ppa:deadsnakes/ppa 
+apt-get update && apt-get install -y software-properties-common  &&
+add-apt-repository -y 'ppa:deadsnakes/ppa' &&
+apt-get install --reinstall ca-certificates &&
+add-apt-repository ppa:deadsnakes/ppa &&
 apt-get update &&
-apt-get install -y python3.9 python3.9-venv python3.9-dev ffmpeg 
-python3.9 -m venv venv 
-. venv/bin/activate 
-pip install -r requirements.txt
+apt-get install -y python3.9 python3.9-venv python3.9-dev ffmpeg &&
+python3.9 -m venv venv &&
+. venv/bin/activate &&
+pip install uvicorn fastapi PyYAML gtts pydub langdetect setuptools
 """
 
 [start]

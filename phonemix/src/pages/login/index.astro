@@ -14,7 +14,6 @@
         }
 
         .container {
-        //    background-color: #1DB954;
             padding: 40px;
             border-radius: 10px;
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
@@ -105,7 +104,7 @@
 
         try {
             const local_url = "http://localhost:4000/api/user/login";
-            const aws_url = "http://ec2-52-8-119-197.us-west-1.compute.amazonaws.com:4000/api/user/login"
+            const aws_url = "https://phonemix.up.railway.app/api/user/login"
 
             const response = await fetch(aws_url, {
                 method: 'POST',

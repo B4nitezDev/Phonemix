@@ -54,7 +54,7 @@ router.post('/phonemix', upload.single('file'), async (req, res) => {
         formData.append('expected_text', textExpected);
         formData.append('language', language_output);
 
-        const awsResponse = await fetch('http://ec2-52-8-119-197.us-west-1.compute.amazonaws.com:8000/feedback', {
+        const awsResponse = await fetch('https://phonemix-model.up.railway.app/feedback', {
             method: 'POST',
             body: formData
         });
