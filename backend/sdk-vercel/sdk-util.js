@@ -5,7 +5,7 @@ import * as dotenv from "dotenv";
 dotenv.config();
 
 const google = createGoogleGenerativeAI({
-    apiKey: "AIzaSyDXcbVRFPNuqw-WEZs-z6vivXC6U7vU1P8",
+    apiKey: process.env.API_KEY,
 });
 
 export async function Translate(textTranslate, language_input, language_output) {
