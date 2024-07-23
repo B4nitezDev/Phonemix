@@ -1,9 +1,9 @@
 import requests
 
-url = "http://ec2-52-8-119-197.us-west-1.compute.amazonaws.com:8000/feedback/"
+url = "https://phonemix-model.up.railway.app"
 audio_file_path = "test/chesca_modded_1.wav"
 expected_text = "bueno estaba escuchando un podcast"
-language = "es"  # Cambia esto al idioma que estás usando, por ejemplo, "en" para inglés
+language = "es"  # Cambia esto al idioma que estás usando, por ejemplo, "en-us" para inglés
 
 # Abre el archivo de audio en modo binario
 with open(audio_file_path, "rb") as audio_file:
