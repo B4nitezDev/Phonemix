@@ -1,7 +1,7 @@
-FROM python:3.9-slim
+FROM python:3.12-slim
 
-# Instalar ffmpeg
-RUN apt-get update && apt-get install -y ffmpeg
+# Instalar ffmpeg y espeak
+RUN apt-get update && apt-get install -y ffmpeg espeak
 
 # Configurar el directorio de trabajo
 WORKDIR /app
@@ -9,11 +9,13 @@ WORKDIR /app
 # Copiar el contenido del proyecto al contenedor
 COPY . /app/
 
-# Instalar las dependencias
-RUN pip install --no-cache-dir -r requirements.txt
+# Crear y activar env, instalar las dependencias
+RUN python3 -m venv venv && \
+    . venv/bin/activate && \
+    pip install --no-cache-dir -r requirements.txt
 
 # Exponer el puerto 8000
 EXPOSE 8000
 
-# Comando para iniciar la aplicación
-CMD ["uvicorn", "app:app", "--reload", "--port", "8000", "--host", "0.0.0.0"]
+# Comando para iniciar la aplicación, asegurando que el venv se activa
+CMD ["sh", "-c", ". venv/bin/activate && uvicorn app:app --reload --port 8000 --host 0.0.0.0"]
