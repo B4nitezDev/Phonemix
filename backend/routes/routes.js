@@ -16,16 +16,24 @@ import {fileURLToPath} from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 
-// 👇️ "/home/john/Desktop/javascript"
 const __dirname = path.dirname(__filename);
 
-// Configuración de Multer
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
 router.get('/', (req, res) => {
     res.status(200).send('Phonemix Listen');
 });
+
+router.get('/langvalidation', async (req, res) => {
+    const {language, expected_text} = req.query
+    console.log(language, expected_text);
+    let local_url = "http://localhost:8000/langvalidation";
+
+    return await fetch(`${local_url}/?language=${language}&expected_text=${expected_text}`, {
+        method: 'GET',
+    })
+})
 
 router.post('/phonemix', upload.single('file'), async (req, res) => {
     if (!req.file || !req.body.expected_text || !req.body.language_output, !req.body.language_input) {
@@ -54,7 +62,10 @@ router.post('/phonemix', upload.single('file'), async (req, res) => {
         formData.append('expected_text', textExpected);
         formData.append('language', language_output);
 
-        const awsResponse = await fetch('https://phonemix-model.up.railway.app/feedback', {
+        const url_deploy = 'https://phonemix-model.up.railway.app/feedback';
+        const url_local = 'http://localhost:8000/feedback';
+
+        const awsResponse = await fetch(url_local, {
             method: 'POST',
             body: formData
         });

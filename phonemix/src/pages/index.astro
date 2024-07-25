@@ -194,14 +194,14 @@
 		#status {
 			display: flex;
 			align-items: center;
-			height: 550px; /* Ajusta según tus necesidades */
+			height: 550px;
 			width: 25%;
-			overflow-y: auto; /* Habilita el desplazamiento vertical */
+			overflow-y: auto;
 		}
 
 
 		.recording-animation {
-			display: none; /* Oculto por defecto */
+			display: none;
 			align-items: center;
 			justify-content: center;
 			margin-top: 20px;
@@ -316,13 +316,14 @@
 			const languageInput = document.getElementById('language_input');
 			const expectedTextInput = document.getElementById('expected_text');
 
-			let url_aws = "https://phonemix-model.up.railway.app/langvalidation"
+			let url_aws = "https://phonemix.up.railway.app/api/langvalidation"
+			let url_local = "http://localhost:4000/api/langvalidation"
 
 			let formData = new FormData();
 
 			formData.append("language", languageInput.value);
 			formData.append("expected_text", expectedTextInput.value);
-			axios.get(`${url_aws}?language=${languageInput.value}&expected_text=${expectedTextInput.value}`, {
+			axios.get(`${url_local}?language=${languageInput.value}&expected_text=${expectedTextInput.value}`, {
 				header: {
 					"Content-Type": "application/json"
 				}

@@ -1,7 +1,3 @@
----
-// src/pages/register.astro
-
----
 <html>
 <head>
     <title>Register</title>
@@ -155,7 +151,7 @@
             const local_url = "http://localhost:4000/api/user/register";
             const aws_url = "https://phonemix.up.railway.app/api/user/register"
 
-            const response = await fetch(aws_url, {
+            const response = await fetch(local_url, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
