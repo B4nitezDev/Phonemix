@@ -15,7 +15,7 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://phonemix.vercel.app", "https://phonemix.up.railway.app"],
+    allow_origins=["*"],
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -28,12 +28,12 @@ async def home():
 async def pronunciation_feedback(file: UploadFile = File(...), expected_text: str = Form(...), language: str = Form(...)):
     if not expected_text:
         raise HTTPException(status_code=400, detail="Expected text is required.")
-    
+
     try:
         # Read the content of the loaded file and convert it to an in-memory stream
         file_content = await file.read()
         user_audio_stream = BytesIO(file_content)
-        
+
         # Convert the audio to PCM WAV format using pydub
         audio_segment = AudioSegment.from_file(user_audio_stream)
         audio_file = f"/tmp/{file.filename}.wav"
@@ -78,7 +78,5 @@ async def language_validation(expected_text: str, language: str):
         print(f"Error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
-
-
 if __name__ == "__main__":
-    uvicorn.run(app, host="https://phonemix-model.up.railway.app")
+    uvicorn.run(app, host="phonemix-model.up.railway.app")

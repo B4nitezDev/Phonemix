@@ -20,18 +20,18 @@ app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 
 
-    //Produccion:
+/*    //Produccion:
 const corsOptions = {
     origin: 'https://phonemix.vercel.app',
     optionsSuccessStatus: 200
-};
+};*/
 
 
-/* Develop
+// Develop
 const corsOptions = {
     origin: '*',
     optionsSuccessStatus: 200
-};*/
+};
 
 app.use(cors(corsOptions));
 

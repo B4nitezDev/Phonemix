@@ -12,4 +12,4 @@ pip install uvicorn fastapi PyYAML gtts pydub langdetect setuptools
 """
 
 [start]
-command = ". venv/bin/activate && uvicorn app:app --reload --port 8000 --host 0.0.0.0"
+command = ". venv/bin/activate && uvicorn app:app --reload --port 8000 --host phonemix-model.up.railway.app"
