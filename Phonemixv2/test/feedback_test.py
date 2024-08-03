@@ -1,7 +1,7 @@
 import requests
 
 url = "https://phonemix-model.up.railway.app"
-audio_file_path = "test/chesca_modded_1.wav"
+audio_file_path = "Phonemixv2/test/chesca_modded_1.wav"
 expected_text = "bueno estaba escuchando un podcast"
 language = "es"  # Cambia esto al idioma que estás usando, por ejemplo, "en-us" para inglés
 
