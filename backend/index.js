@@ -13,9 +13,11 @@ dotenv.config()
 
 const app = express();
 
-app.use(helmet());
+app.use(cors("*"))
+
+//app.use(helmet());
 app.use(express.json());
-app.use(bodyParser.json());
+//app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 
@@ -33,8 +35,9 @@ const corsOptions = {
     optionsSuccessStatus: 200
 };
 
-app.use(cors(corsOptions));
+//app.use(cors('*'));
 
+/*
 mongoose.connect(process.env.DB_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -49,13 +52,15 @@ db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', () => {
     console.log('Connected to MongoDB');
 });
+*/
 
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000,
     max: 25,
     message: 'Too many requests from this IP, please try again later.'
 });
-app.use(limiter);
+
+//app.use(limiter);
 
 app.use('/api/', router)
 app.use('/api/user', userRouter)
