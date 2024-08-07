@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <!DOCTYPE html>
 <html lang="en">
@@ -330,7 +331,7 @@
 			})
 				.then(response => {
 					console.log(response.data)
-					errorExpectedText.textContent = '';
+					errorExpectedText.textContent = response.data.data.message;
 				})
 				.catch(error => {
 					errorExpectedText.textContent = 'Error en la validación del texto.';
@@ -339,8 +340,15 @@
 			console.error('Error:', error);
 		}
 	}
+
 	function startRecording() {
-		navigator.mediaDevices.getUserMedia({ audio: true })
+
+     // Verificar si ya existe una instancia anterior de mediaRecorder y detenerla
+        if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+            mediaRecorder.stop();
+        }
+        recordedChunks = [];
+    navigator.mediaDevices.getUserMedia({ audio: true })
 			.then(function(stream) {
 				mediaRecorder = new MediaRecorder(stream);
 				mediaRecorder.ondataavailable = function(e) {
@@ -384,6 +392,8 @@
 		const languageOutput = document.getElementById('language_output');
 		const recordedBlob = new Blob(recordedChunks, { type: 'audio/webm' });
 
+    console.info(recordedBlob)
+
 		const formData = new FormData();
 		formData.append('file', recordedBlob);
 		formData.append('expected_text', expectedTextInput.value);
@@ -393,7 +403,7 @@
 		let url_local = "http://localhost:4000/api/phonemix";
 		if(!window.localStorage.getItem('token')) {
 			document.getElementById('status').innerHTML = '';
-			axios.post(url_aws, formData, {
+			axios.post(url_local, formData, {
 				headers: {
 					'Content-Type': 'multipart/form-data'
 					}
@@ -446,7 +456,7 @@
 				//infoText1.textContent = "Default Text 1"
 
 				const infoText2 = document.createElement('p');
-				//infoText2.classList.add('info-text');
+				infoText2.classList.add('info-text');
 				infoText2.textContent = response.data?.optionalText?.informalTranslation;
 				//infoText2.textContent = "Default Text 2"
 
@@ -475,7 +485,7 @@
 				});
 		} else {
 			document.getElementById('status').innerHTML = '';
-			axios.post(url_aws, formData, {
+			axios.post(url_local, formData, {
 				headers: {
 					'Content-Type': 'multipart/form-data',
 					"Authorization": `Bearer ${localStorage.getItem('token')}`
