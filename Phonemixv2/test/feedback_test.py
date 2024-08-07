@@ -1,6 +1,6 @@
 import requests
 
-url = "https://phonemix-model.up.railway.app"
+url = "http://ec2-52-8-119-197.us-west-1.compute.amazonaws.com:8000/feedback"
 audio_file_path = "Phonemixv2/test/chesca_modded_1.wav"
 expected_text = "bueno estaba escuchando un podcast"
 language = "es"  # Cambia esto al idioma que estás usando, por ejemplo, "en-us" para inglés
