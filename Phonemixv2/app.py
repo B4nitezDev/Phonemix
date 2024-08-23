@@ -103,4 +103,4 @@ with gr.Blocks() as demo:
         ]
     )
 
-demo.launch(share=True)
+demo.launch(server_name="ec2-52-8-119-197.us-west-1.compute.amazonaws.com", server_port=8000)
