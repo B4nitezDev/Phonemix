@@ -56,6 +56,14 @@ def pronunciation_feedback(native_language, language, expected_text, file_path):
 with gr.Blocks() as demo:
     gr.Markdown("# Pronunciation Feedback Tool")
 
+    text_input = gr.State("")
+
+
+    def handle(expected_text, language):
+        is_valid, validation_message = validate_language(expected_text, language)
+        if not is_valid:
+            return validation_message, None, None, None, None, None
+
     with gr.Row():
         native_language_input = gr.Dropdown(
             label="Tu idioma Nativo", 
@@ -67,6 +75,10 @@ with gr.Blocks() as demo:
         )
         text_input = gr.Textbox(label="Qué quieres decir")
         audio_input = gr.Audio(label="Dilo en voz alta", type="filepath")
+
+    text_input.change(
+        handle(expected_text=text_input, language=native_language_input), gr.time_to_live
+    )
 
     transcribed_text_output = gr.Textbox(label="El texto del audio del usuario")
     expected_text_output = gr.Textbox(label="Texto correcto")
