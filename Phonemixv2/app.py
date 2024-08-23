@@ -7,8 +7,7 @@ from src.lang_validation import validate_language
 from pydub import AudioSegment
 import os
 
-def pronunciation_feedback(native_language, language, expected_text, file_path):
-
+def pronunciation_feedback(language, expected_text, file_path):
     try:
         # Convertir el archivo subido a formato PCM WAV usando pydub
         audio_segment = AudioSegment.from_file(file_path)
@@ -39,6 +38,7 @@ def pronunciation_feedback(native_language, language, expected_text, file_path):
             user_phonemes, 
             correct_phonemes, 
             file_path, 
+            feedback,
             expected_audio_file
         )
 
@@ -50,7 +50,7 @@ def pronunciation_feedback(native_language, language, expected_text, file_path):
 
 # Crear la interfaz de Gradio
 with gr.Blocks() as demo:
-    gr.Markdown("# Pronunciation Feedback Tool")
+    gr.Markdown("# Phonemix: Pronunciation Feedback Tool")
 
     text_input = gr.State("")
     text_validate_boolean = gr.State(False)
@@ -63,19 +63,19 @@ with gr.Blocks() as demo:
 
     with gr.Row():
         native_language_input = gr.Dropdown(
-            label="Tu idioma Nativo", 
+            label="Your native language", 
             choices=["es", "es-la", "pt-pt", "pt-br", "de", "it", "fr-fr", "en-gb", "en-us"]
         )
         language_input = gr.Dropdown(
-            label="En qué idioma quieres hablar", 
+            label="What language do you want to speak?", 
             choices=["es", "es-la", "pt-pt", "pt-br", "de", "it", "fr-fr", "en-gb", "en-us"]
         )
 
         with gr.Column():
-            text_input = gr.Textbox(label="Qué quieres decir")
+            text_input = gr.Textbox(label="What do you want to say?")
             validation_message_output = gr.Markdown("")
         
-        audio_input = gr.Audio(label="Dilo en voz alta", type="filepath")
+        audio_input = gr.Audio(label="Speak out loud", type="filepath")
 
     text_input.change(
         validate_text_in_real_time, 
@@ -84,20 +84,18 @@ with gr.Blocks() as demo:
         every=2  # Valida cada 2 segundos
     )
 
-    transcribed_text_output = gr.Textbox(label="El texto del audio del usuario")
-    expected_text_output = gr.Textbox(label="Texto correcto")
-    user_phonemes_output = gr.Textbox(label="Phonemas del usuario")
-    correct_phonemes_output = gr.Textbox(label="Phonemas correctos")
-    expected_audio_output = gr.Audio(label="Audio esperado", type="filepath")
+    transcribed_text_output = gr.Textbox(label="You say this")
+    user_phonemes_output = gr.Textbox(label="Your Phonemes")
+    correct_phonemes_output = gr.Textbox(label="Correct Phonemes")
+    expected_audio_output = gr.Audio(label="Correct Audio", type="filepath")
 
-    feedback_button = gr.Button("Obtener Retroalimentación")
+    feedback_button = gr.Button("Get Feedback")
 
     feedback_button.click(
         pronunciation_feedback,
         inputs=[native_language_input, language_input, text_input, audio_input],
         outputs=[
-            transcribed_text_output, 
-            expected_text_output, 
+            transcribed_text_output,
             user_phonemes_output, 
             correct_phonemes_output, 
             audio_input, 
