@@ -36,16 +36,23 @@ tld_map_t2s:
   uk: co.uk # united kingdom (en)
 
 lang_validation:
-  es: es
-  es-la: es
-  pt-pt: pt
-  pt-br: pt
-  de: de
-  it: it
-  fr-fr: fr
-  en-gb: en
-  en-us: en
-  
+  es: 
+    - es
+    - es-la
+  en: 
+    - en-us
+    - en-gb
+  fr: 
+    - fr-fr
+  de: 
+    - de
+  it: 
+    - it
+  pt: 
+    - pt-pt
+    - pt-br
+
+
   
 unknownvalueerror: Google Speech Recognition could not understand audio
 
