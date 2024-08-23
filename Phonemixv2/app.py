@@ -8,10 +8,6 @@ from pydub import AudioSegment
 import os
 
 def pronunciation_feedback(native_language, language, expected_text, file_path):
-    # Validación del texto en el idioma seleccionado
-    is_valid, validation_message = validate_language(expected_text, language)
-    if not is_valid:
-        return validation_message, None, None, None, None, None
 
     try:
         # Convertir el archivo subido a formato PCM WAV usando pydub
@@ -77,7 +73,7 @@ with gr.Blocks() as demo:
         audio_input = gr.Audio(label="Dilo en voz alta", type="filepath")
 
     text_input.change(
-        handle(expected_text=text_input, language=native_language_input), gr.time_to_live
+        handle(expected_text=text_input.value, language=native_language_input), gr.time_to_live
     )
 
     transcribed_text_output = gr.Textbox(label="El texto del audio del usuario")
