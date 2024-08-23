@@ -98,7 +98,6 @@ with gr.Blocks() as demo:
             transcribed_text_output,
             user_phonemes_output, 
             correct_phonemes_output, 
-            audio_input, 
             expected_audio_output
         ]
     )
