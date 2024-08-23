@@ -20,7 +20,7 @@ def pronunciation_feedback(native_language, language, expected_text, file):
 
         # Convertir el audio a formato PCM WAV usando pydub
         audio_segment = AudioSegment.from_file(user_audio_stream)
-        audio_file = f"/tmp/{file.name}.wav"
+        audio_file = f"/tmp/{os.path.basename(file.name)}.wav"
         audio_segment.export(audio_file, format="wav")
 
         # Transcribir el archivo de audio y obtener fonemas
@@ -70,13 +70,13 @@ with gr.Blocks() as demo:
             choices=["es", "es-la", "pt-pt", "pt-br", "de", "it", "fr-fr", "en-gb", "en-us"]
         )
         text_input = gr.Textbox(label="Qué quieres decir")
-        audio_input = gr.Audio(label="Dilo en voz alta", type="file")
+        audio_input = gr.Audio(label="Dilo en voz alta", type="filepath")
 
     transcribed_text_output = gr.Textbox(label="El texto del audio del usuario")
     expected_text_output = gr.Textbox(label="Texto correcto")
     user_phonemes_output = gr.Textbox(label="Phonemas del usuario")
     correct_phonemes_output = gr.Textbox(label="Phonemas correctos")
-    expected_audio_output = gr.Audio(label="Audio esperado")
+    expected_audio_output = gr.Audio(label="Audio esperado", type="filepath")
 
     feedback_button = gr.Button("Obtener Retroalimentación")
 
