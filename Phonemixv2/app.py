@@ -53,6 +53,7 @@ with gr.Blocks() as demo:
     gr.Markdown("# Pronunciation Feedback Tool")
 
     text_input = gr.State("")
+    text_validate_boolean = gr.State(False)
 
     def validate_text_in_real_time(expected_text, language):
         is_valid, validation_message = validate_language(expected_text, language)
@@ -69,12 +70,12 @@ with gr.Blocks() as demo:
             label="En qué idioma quieres hablar", 
             choices=["es", "es-la", "pt-pt", "pt-br", "de", "it", "fr-fr", "en-gb", "en-us"]
         )
-        
-        audio_input = gr.Audio(label="Dilo en voz alta", type="filepath")
-        
+
         with gr.Column():
             text_input = gr.Textbox(label="Qué quieres decir")
             validation_message_output = gr.Markdown("")
+        
+        audio_input = gr.Audio(label="Dilo en voz alta", type="filepath")
 
     text_input.change(
         validate_text_in_real_time, 

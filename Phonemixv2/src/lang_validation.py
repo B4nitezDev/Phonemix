@@ -8,8 +8,8 @@ def validate_language(text, expected_language):
         return False, "Could not detect the language of the text."
     
     languages = phonemize_config['lang_validation']
-    
-    expected_language = expected_language.lower()
+    if not expected_language == None:
+        expected_language = expected_language.lower()
     
     if expected_language not in languages.values():
         return False, "Unsupported language."
