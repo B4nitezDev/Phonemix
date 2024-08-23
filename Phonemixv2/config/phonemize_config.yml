@@ -37,15 +37,15 @@ tld_map_t2s:
 
 lang_validation:
   es: es
-  es: es-la
-  en: en-us
-  en: en-gb
-  fr: fr-fr
+  es-la: es
+  pt-pt: pt
+  pt-br: pt
   de: de
   it: it
-  pt: pt-pt
-  pt: pt-br
-
+  fr-fr: fr
+  en-gb: en
+  en-us: en
+  
   
 unknownvalueerror: Google Speech Recognition could not understand audio
 
