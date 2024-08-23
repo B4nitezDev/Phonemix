@@ -93,7 +93,7 @@ with gr.Blocks() as demo:
 
     feedback_button.click(
         pronunciation_feedback,
-        inputs=[native_language_input, language_input, text_input, audio_input],
+        inputs=[language_input, text_input, audio_input],
         outputs=[
             transcribed_text_output,
             user_phonemes_output, 
