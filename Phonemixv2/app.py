@@ -4,23 +4,19 @@ from src.phonemize.transcriber import transcribe_audio
 from src.phonemix import provide_detailed_feedback
 from src.t2s.t2s import text_to_speech
 from src.lang_validation import validate_language
-from io import BytesIO
 from pydub import AudioSegment
 import os
 
-def pronunciation_feedback(native_language, language, expected_text, file):
+def pronunciation_feedback(native_language, language, expected_text, file_path):
     # Validación del texto en el idioma seleccionado
     is_valid, validation_message = validate_language(expected_text, language)
     if not is_valid:
         return validation_message, None, None, None, None, None
 
     try:
-        # Convertir el archivo subido a un flujo de memoria
-        user_audio_stream = BytesIO(file.read())
-
-        # Convertir el audio a formato PCM WAV usando pydub
-        audio_segment = AudioSegment.from_file(user_audio_stream)
-        audio_file = f"/tmp/{os.path.basename(file.name)}.wav"
+        # Convertir el archivo subido a formato PCM WAV usando pydub
+        audio_segment = AudioSegment.from_file(file_path)
+        audio_file = f"/tmp/{os.path.basename(file_path)}.wav"
         audio_segment.export(audio_file, format="wav")
 
         # Transcribir el archivo de audio y obtener fonemas
@@ -46,7 +42,7 @@ def pronunciation_feedback(native_language, language, expected_text, file):
             expected_text, 
             user_phonemes, 
             correct_phonemes, 
-            file, 
+            file_path, 
             expected_audio_file
         )
 
