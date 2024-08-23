@@ -54,11 +54,9 @@ with gr.Blocks() as demo:
 
     text_input = gr.State("")
 
-
-    def handle(expected_text, language):
+    def validate_text_in_real_time(expected_text, language):
         is_valid, validation_message = validate_language(expected_text, language)
-        if not is_valid:
-            return validation_message, None, None, None, None, None
+        return validation_message if not is_valid else ""
 
     with gr.Row():
         native_language_input = gr.Dropdown(
@@ -71,9 +69,14 @@ with gr.Blocks() as demo:
         )
         text_input = gr.Textbox(label="Qué quieres decir")
         audio_input = gr.Audio(label="Dilo en voz alta", type="filepath")
+        validation_message_output = gr.Textbox(label="Validación del texto", interactive=False)
+
 
     text_input.change(
-        handle(expected_text=text_input.value, language=native_language_input), gr.time_to_live
+        validate_text_in_real_time, 
+        inputs=[text_input, language_input], 
+        outputs=validation_message_output,
+        every=2  # Valida cada 2 segundos
     )
 
     transcribed_text_output = gr.Textbox(label="El texto del audio del usuario")
