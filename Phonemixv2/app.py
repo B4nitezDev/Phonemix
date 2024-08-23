@@ -1,51 +1,35 @@
-from fastapi import FastAPI, UploadFile, File, Form, HTTPException
-from fastapi.middleware.cors import CORSMiddleware
+import gradio as gr
 from src.phonemize.analyzer import get_phonemes
 from src.phonemize.transcriber import transcribe_audio
 from src.phonemix import provide_detailed_feedback
 from src.t2s.t2s import text_to_speech
 from src.lang_validation import validate_language
-import uvicorn
-import base64
 from io import BytesIO
 from pydub import AudioSegment
 import os
 
-app = FastAPI()
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-@app.get("/")
-async def home():
-    return {"message": "Welcome to the Pronunciation Feedback API"}
-
-@app.post("/feedback/")
-async def pronunciation_feedback(file: UploadFile = File(...), expected_text: str = Form(...), language: str = Form(...)):
+def pronunciation_feedback(file, expected_text, language):
     if not expected_text:
-        raise HTTPException(status_code=400, detail="Expected text is required.")
+        return "Expected text is required."
 
     try:
-        # Read the content of the loaded file and convert it to an in-memory stream
-        file_content = await file.read()
-        user_audio_stream = BytesIO(file_content)
+        # Convert the uploaded file to an in-memory stream
+        user_audio_stream = BytesIO(file.read())
 
         # Convert the audio to PCM WAV format using pydub
         audio_segment = AudioSegment.from_file(user_audio_stream)
-        audio_file = f"/tmp/{file.filename}.wav"
+        audio_file = f"/tmp/{file.name}.wav"
         audio_segment.export(audio_file, format="wav")
 
         # Transcribe the audio file and get phonemes
         transcribed_text = transcribe_audio(audio_file, language)
         user_phonemes = get_phonemes(transcribed_text, language)
 
-        # Generate expected audio and convert it to base64
+        # Generate expected audio as a stream
         expected_audio_stream = text_to_speech(expected_text, language)
-        expected_audio_base64 = base64.b64encode(expected_audio_stream.read()).decode('utf-8')
+        expected_audio = AudioSegment.from_file(expected_audio_stream)
+        expected_audio_file = "/tmp/expected_audio.wav"
+        expected_audio.export(expected_audio_file, format="wav")
 
         correct_phonemes = get_phonemes(expected_text, language)
 
@@ -55,28 +39,63 @@ async def pronunciation_feedback(file: UploadFile = File(...), expected_text: st
         # Clean up the temporary file
         os.remove(audio_file)
 
-        return {
-            "user_text": transcribed_text,
-            "user_phonemes": user_phonemes,
-            "expected_phonemes": correct_phonemes,
-            "feedback": feedback,
-            "expected_audio": "data:audio/mpeg;base64," + expected_audio_base64,
-        }
+        return transcribed_text, user_phonemes, correct_phonemes, feedback, expected_audio_file
 
     except ValueError as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        return str(e)
     except Exception as e:
         print(f"Error: {e}")
-        raise HTTPException(status_code=500, detail="An unexpected error occurred.")
+        return "An unexpected error occurred."
 
-@app.get("/langvalidation/")
-async def language_validation(expected_text: str, language: str):
+def language_validation(expected_text, language):
     try:
         is_valid, validation_message = validate_language(expected_text, language)
-        return {"status": is_valid, "message": validation_message}
+        if not is_valid:
+            return f"Validation Error: {validation_message}"
+        return f"Validation Successful: The text matches the selected language ({language})."
     except Exception as e:
         print(f"Error: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        return f"An error occurred: {str(e)}"
 
-if __name__ == "__main__":
-    uvicorn.run(app, host="phonemix-model.up.railway.app")
+# Crear la interfaz de Gradio
+with gr.Blocks() as demo:
+    gr.Markdown("# Pronunciation Feedback Tool")
+
+    with gr.Tab("Feedback"):
+        with gr.Row():
+            audio_input = gr.Audio(label="Upload Audio File")
+            text_input = gr.Textbox(label="Expected Text")
+            lang_input = gr.Textbox(label="Language")
+        transcribed_text_output = gr.Textbox(label="Transcribed Text")
+        user_phonemes_output = gr.Textbox(label="User Phonemes")
+        correct_phonemes_output = gr.Textbox(label="Expected Phonemes")
+        feedback_output = gr.Textbox(label="Feedback")
+        expected_audio_output = gr.Audio(label="Expected Audio")
+        feedback_button = gr.Button("Get Feedback")
+
+        feedback_button.click(
+            pronunciation_feedback,
+            inputs=[audio_input, text_input, lang_input],
+            outputs=[
+                transcribed_text_output, 
+                user_phonemes_output, 
+                correct_phonemes_output, 
+                feedback_output, 
+                expected_audio_output
+            ]
+        )
+
+    with gr.Tab("Language Validation"):
+        with gr.Row():
+            validation_text_input = gr.Textbox(label="Expected Text")
+            validation_lang_input = gr.Textbox(label="Language")
+        validation_output = gr.Textbox(label="Validation Result")
+        validation_button = gr.Button("Validate Language")
+
+        validation_button.click(
+            language_validation,
+            inputs=[validation_text_input, validation_lang_input],
+            outputs=validation_output
+        )
+
+demo.launch()
