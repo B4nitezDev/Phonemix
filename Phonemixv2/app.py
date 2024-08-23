@@ -34,11 +34,9 @@ def pronunciation_feedback(language, expected_text, file_path):
 
         return (
             transcribed_text, 
-            expected_text, 
             user_phonemes, 
             correct_phonemes, 
-            file_path, 
-            feedback,
+            ### add feedback
             expected_audio_file
         )
 
@@ -84,7 +82,7 @@ with gr.Blocks() as demo:
         every=2  # Valida cada 2 segundos
     )
 
-    transcribed_text_output = gr.Textbox(label="You say this")
+    transcribed_text_output = gr.Textbox(label="You said this")
     user_phonemes_output = gr.Textbox(label="Your Phonemes")
     correct_phonemes_output = gr.Textbox(label="Correct Phonemes")
     expected_audio_output = gr.Audio(label="Correct Audio", type="filepath")
