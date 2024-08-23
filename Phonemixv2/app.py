@@ -56,7 +56,9 @@ with gr.Blocks() as demo:
 
     def validate_text_in_real_time(expected_text, language):
         is_valid, validation_message = validate_language(expected_text, language)
-        return validation_message if not is_valid else ""
+        if not is_valid:
+            return gr.Markdown(f"<span style='color: red;'>{validation_message}</span>")
+        return gr.Markdown("")
 
     with gr.Row():
         native_language_input = gr.Dropdown(
@@ -67,10 +69,12 @@ with gr.Blocks() as demo:
             label="En qué idioma quieres hablar", 
             choices=["es", "es-la", "pt-pt", "pt-br", "de", "it", "fr-fr", "en-gb", "en-us"]
         )
-        text_input = gr.Textbox(label="Qué quieres decir")
+        
         audio_input = gr.Audio(label="Dilo en voz alta", type="filepath")
-        validation_message_output = gr.Textbox(label="Validación del texto", interactive=False)
-
+        
+        with gr.Column():
+            text_input = gr.Textbox(label="Qué quieres decir")
+            validation_message_output = gr.Markdown("")
 
     text_input.change(
         validate_text_in_real_time, 
