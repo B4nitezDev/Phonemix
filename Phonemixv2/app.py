@@ -8,24 +8,26 @@ from io import BytesIO
 from pydub import AudioSegment
 import os
 
-def pronunciation_feedback(file, expected_text, language):
-    if not expected_text:
-        return "Expected text is required."
+def pronunciation_feedback(native_language, language, expected_text, file):
+    # Validación del texto en el idioma seleccionado
+    is_valid, validation_message = validate_language(expected_text, language)
+    if not is_valid:
+        return validation_message, None, None, None, None, None
 
     try:
-        # Convert the uploaded file to an in-memory stream
+        # Convertir el archivo subido a un flujo de memoria
         user_audio_stream = BytesIO(file.read())
 
-        # Convert the audio to PCM WAV format using pydub
+        # Convertir el audio a formato PCM WAV usando pydub
         audio_segment = AudioSegment.from_file(user_audio_stream)
         audio_file = f"/tmp/{file.name}.wav"
         audio_segment.export(audio_file, format="wav")
 
-        # Transcribe the audio file and get phonemes
+        # Transcribir el archivo de audio y obtener fonemas
         transcribed_text = transcribe_audio(audio_file, language)
         user_phonemes = get_phonemes(transcribed_text, language)
 
-        # Generate expected audio as a stream
+        # Generar el audio esperado como un archivo
         expected_audio_stream = text_to_speech(expected_text, language)
         expected_audio = AudioSegment.from_file(expected_audio_stream)
         expected_audio_file = "/tmp/expected_audio.wav"
@@ -33,69 +35,62 @@ def pronunciation_feedback(file, expected_text, language):
 
         correct_phonemes = get_phonemes(expected_text, language)
 
-        # Generate feedback
+        # Generar retroalimentación
         feedback = provide_detailed_feedback(user_phonemes, correct_phonemes)
 
-        # Clean up the temporary file
+        # Limpiar archivo temporal
         os.remove(audio_file)
 
-        return transcribed_text, user_phonemes, correct_phonemes, feedback, expected_audio_file
+        return (
+            transcribed_text, 
+            expected_text, 
+            user_phonemes, 
+            correct_phonemes, 
+            file, 
+            expected_audio_file
+        )
 
     except ValueError as e:
-        return str(e)
+        return str(e), None, None, None, None, None
     except Exception as e:
         print(f"Error: {e}")
-        return "An unexpected error occurred."
-
-def language_validation(expected_text, language):
-    try:
-        is_valid, validation_message = validate_language(expected_text, language)
-        if not is_valid:
-            return f"Validation Error: {validation_message}"
-        return f"Validation Successful: The text matches the selected language ({language})."
-    except Exception as e:
-        print(f"Error: {e}")
-        return f"An error occurred: {str(e)}"
+        return "An unexpected error occurred.", None, None, None, None, None
 
 # Crear la interfaz de Gradio
 with gr.Blocks() as demo:
     gr.Markdown("# Pronunciation Feedback Tool")
 
-    with gr.Tab("Feedback"):
-        with gr.Row():
-            audio_input = gr.Audio(label="Upload Audio File")
-            text_input = gr.Textbox(label="Expected Text")
-            lang_input = gr.Textbox(label="Language")
-        transcribed_text_output = gr.Textbox(label="Transcribed Text")
-        user_phonemes_output = gr.Textbox(label="User Phonemes")
-        correct_phonemes_output = gr.Textbox(label="Expected Phonemes")
-        feedback_output = gr.Textbox(label="Feedback")
-        expected_audio_output = gr.Audio(label="Expected Audio")
-        feedback_button = gr.Button("Get Feedback")
-
-        feedback_button.click(
-            pronunciation_feedback,
-            inputs=[audio_input, text_input, lang_input],
-            outputs=[
-                transcribed_text_output, 
-                user_phonemes_output, 
-                correct_phonemes_output, 
-                feedback_output, 
-                expected_audio_output
-            ]
+    with gr.Row():
+        native_language_input = gr.Dropdown(
+            label="Tu idioma Nativo", 
+            choices=["es", "es-la", "pt-pt", "pt-br", "de", "it", "fr-fr", "en-gb", "en-us"]
         )
-
-    with gr.Tab("Language Validation"):
-        with gr.Row():
-            validation_text_input = gr.Textbox(label="Expected Text")
-            validation_lang_input = gr.Textbox(label="Language")
-        validation_output = gr.Textbox(label="Validation Result")
-        validation_button = gr.Button("Validate Language")
-
-        validation_button.click(
-            language_validation,
-            inputs=[validation_text_input, validation_lang_input],
-            outputs=validation_output
+        language_input = gr.Dropdown(
+            label="En qué idioma quieres hablar", 
+            choices=["es", "es-la", "pt-pt", "pt-br", "de", "it", "fr-fr", "en-gb", "en-us"]
         )
+        text_input = gr.Textbox(label="Qué quieres decir")
+        audio_input = gr.Audio(label="Dilo en voz alta", type="file")
 
-demo.launch()
+    transcribed_text_output = gr.Textbox(label="El texto del audio del usuario")
+    expected_text_output = gr.Textbox(label="Texto correcto")
+    user_phonemes_output = gr.Textbox(label="Phonemas del usuario")
+    correct_phonemes_output = gr.Textbox(label="Phonemas correctos")
+    expected_audio_output = gr.Audio(label="Audio esperado")
+
+    feedback_button = gr.Button("Obtener Retroalimentación")
+
+    feedback_button.click(
+        pronunciation_feedback,
+        inputs=[native_language_input, language_input, text_input, audio_input],
+        outputs=[
+            transcribed_text_output, 
+            expected_text_output, 
+            user_phonemes_output, 
+            correct_phonemes_output, 
+            audio_input, 
+            expected_audio_output
+        ]
+    )
+
+demo.launch(share=True)
