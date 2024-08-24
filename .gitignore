@@ -1,6 +1,0 @@
-node_modules/
-.env
-phonemix.pem
-phonemix-venv
-__pycache__
-venv
