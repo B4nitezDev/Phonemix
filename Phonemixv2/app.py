@@ -48,7 +48,9 @@ def pronunciation_feedback(language, expected_text, file_path):
 
 # Crear la interfaz de Gradio
 with gr.Blocks() as demo:
-    gr.Markdown("# Phonemix: Pronunciation Feedback Tool")
+    with gr.Row():
+        gr.Image("static/logo.png", elem_id="logo", width=50, height=50)  # Agrega el logo
+        gr.Markdown("# Phonemix: Pronunciation Feedback Tool")  # Agrega el título
 
     text_input = gr.State("")
     text_validate_boolean = gr.State(False)
