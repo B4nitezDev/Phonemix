@@ -48,7 +48,7 @@ def pronunciation_feedback(language, expected_text, file_path):
 
 # Crear la interfaz de Gradio
 with gr.Blocks() as demo:
-    with gr.Row():
+    with gr.Row(width):
         gr.Image("static/logo.jpg", elem_id="logo", width=50, height=50)  # Agrega el logo
         gr.Markdown("# Phonemix: Pronunciation Feedback Tool")  # Agrega el título
 
@@ -83,13 +83,14 @@ with gr.Blocks() as demo:
         outputs=validation_message_output,
         every=2  # Valida cada 2 segundos
     )
-
+    
+    feedback_button = gr.Button("Get Feedback")
+    
     transcribed_text_output = gr.Textbox(label="You said this")
     user_phonemes_output = gr.Textbox(label="Your Phonemes")
     correct_phonemes_output = gr.Textbox(label="Correct Phonemes")
     expected_audio_output = gr.Audio(label="Correct Audio", type="filepath")
 
-    feedback_button = gr.Button("Get Feedback")
 
     feedback_button.click(
         pronunciation_feedback,
