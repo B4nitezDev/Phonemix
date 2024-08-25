@@ -24,10 +24,20 @@ jobs:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
-      # Paso 3: Construir la imagen Docker
-      - name: Build the Docker image
-        run: docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/miapp:latest .
+      # Paso 3: Obtener hash de versionado
+      - name: Set image tag
+        id: vars
+        run: |
+          if [ "${{ github.ref }}" == "refs/heads/main" ]; then
+            echo "TAG=latest" >> $GITHUB_ENV
+          else
+            echo "TAG=${GITHUB_SHA::7}" >> $GITHUB_ENV
+          fi
 
-      # Paso 4: Publicar la imagen a Docker Hub
+      # Paso 4: Construir la imagen
+      - name: Build the Docker image
+        run: docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/phonemix:${{ env.TAG }} .
+
+      # Paso 5: Publicar la imagen a Docker Hub
       - name: Push the Docker image
-        run: docker push ${{ secrets.DOCKER_HUB_USERNAME }}/miapp:latest
+        run: docker push ${{ secrets.DOCKER_HUB_USERNAME }}/phonemix:${{ env.TAG }}
