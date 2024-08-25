@@ -1,4 +1,6 @@
-- deploy en railway o algo que agregue ssl.
+* Dockerizar app
+* deploy en railway o algo que agregue ssl.
+- Agregar github action para que auto deploye imagen docker
 - refactorizar codigo en app.py.
 - arreglar estilos.
 - agregar feedback detallado.
