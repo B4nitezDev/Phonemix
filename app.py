@@ -6,11 +6,10 @@ from src.suggestions.suggestions import suggestion_generate
 def validate_text_in_real_time(expected_text, language):
     is_valid, validation_message = validate_language(expected_text, language)
     if not is_valid:
-        return gr.Markdown(f"<span style='color: red;'>{validation_message}</span>")
-    return gr.Markdown("")
+        return gr.Markdown(f"<div style='color: red; width: 200px; height: 50px;'>{validation_message}</div>")
+    return gr.Markdown(f"<div style='width: 200px; height: 50px;'></div>")
 
 def get_feedback(language, text, audio):
-    # Obtiene el feedback detallado como un texto
     transcribed_text, user_phonemes, correct_phonemes, detailed_feedback, expected_audio = pronunciation_feedback(language, text, audio)
     suggestions = suggestion_generate(text, language)
     return transcribed_text, user_phonemes, correct_phonemes, detailed_feedback, expected_audio, suggestions
@@ -34,7 +33,7 @@ with gr.Blocks() as demo:
 
         with gr.Column():
             text_input = gr.Textbox(label="What do you want to say?", max_lines=2)
-            validation_message_output = gr.Markdown("")
+            validation_message_output = gr.Markdown("<div style='width: 200px; height: 50px;'></div>")
         
         audio_input = gr.Audio(label="Speak out loud", type="filepath")
 
@@ -53,7 +52,7 @@ with gr.Blocks() as demo:
     
     with gr.Row():
         with gr.Accordion(label="Show detailed feedback"):
-            detailed_feedback_output = gr.Markdown()  # Colocamos Markdown aquí
+            detailed_feedback_output = gr.Markdown()
     expected_audio_output = gr.Audio(label="Correct Audio", type="filepath")
     
     with gr.Column():
