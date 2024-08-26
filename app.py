@@ -53,17 +53,13 @@ with gr.Blocks() as demo:
     
     with gr.Row():
         with gr.Accordion(label="Show detailed feedback"):
-            detailed_feedback_output = gr.Markdown(
-                style={"height": "150px", "overflow": "auto"}  # Ajuste de tamaño del contenedor
-            )
+            detailed_feedback_output = gr.Markdown()  # Colocamos Markdown aquí
     expected_audio_output = gr.Audio(label="Correct Audio", type="filepath")
     
     with gr.Column():
         gr.Markdown("## Suggestions")
-        suggestions_output = gr.Markdown(
-            label="Suggestions",
-            style={"height": "100px", "overflow": "auto"}  # Ajuste de tamaño del contenedor
-        )
+        with gr.Box():  # Aquí se ajusta el tamaño del contenedor
+            suggestions_output = gr.Markdown()
 
     feedback_button.click(
         get_feedback,
