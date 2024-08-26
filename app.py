@@ -1,7 +1,7 @@
 import gradio as gr
 from src.phonemix import pronunciation_feedback
 from src.lang_validation import validate_language
-from src.suggetions.suggetions import suggetion_generate
+from src.suggestions.suggestions import suggestion_generate
 
 def validate_text_in_real_time(expected_text, language):
     is_valid, validation_message = validate_language(expected_text, language)
@@ -12,11 +12,8 @@ def validate_text_in_real_time(expected_text, language):
 def get_feedback(language, text, audio):
     # Obtiene el feedback detallado como un texto
     transcribed_text, user_phonemes, correct_phonemes, detailed_feedback, expected_audio = pronunciation_feedback(language, text, audio)
-    return transcribed_text, user_phonemes, correct_phonemes, detailed_feedback, expected_audio
-
-def get_suggestions(text, language):
-    # Obtiene las sugerencias
-    return suggetion_generate(text, language)
+    suggestions = suggestion_generate(text, language)
+    return transcribed_text, user_phonemes, correct_phonemes, detailed_feedback, expected_audio, suggestions
 
 with gr.Blocks() as demo:
     with gr.Row():
@@ -49,7 +46,6 @@ with gr.Blocks() as demo:
     )
     
     feedback_button = gr.Button("Get Feedback")
-    suggestions_button = gr.Button("Get Suggestions")
     
     transcribed_text_output = gr.Textbox(label="You said this")
     user_phonemes_output = gr.Textbox(label="Your Phonemes")
@@ -70,14 +66,9 @@ with gr.Blocks() as demo:
             user_phonemes_output, 
             correct_phonemes_output, 
             detailed_feedback_output,
-            expected_audio_output
+            expected_audio_output,
+            suggestions_output
         ]
-    )
-
-    suggestions_button.click(
-        get_suggestions,
-        inputs=[text_input, language_input],
-        outputs=[suggestions_output]
     )
 
 demo.launch(server_name="0.0.0.0", server_port=7860)
