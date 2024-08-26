@@ -44,6 +44,11 @@ with gr.Blocks() as demo:
     correct_phonemes_output = gr.Textbox(label="Correct Phonemes")
     detailed_feedback_output = gr.Markdown(label="Detailed Feedback")
     expected_audio_output = gr.Audio(label="Correct Audio", type="filepath")
+    
+    # Crear un accordion para el feedback detallado
+    with gr.Accordion("Detailed Feedback", open=False):
+        gr.Markdown("Here you can see the detailed feedback on your pronunciation.")
+        detailed_feedback_content = gr.Markdown(detailed_feedback_output)  # Contenido del accordion
 
     #suggetions_text = suggetion_generate(textInput=text_input, language_output=language_input)
 
