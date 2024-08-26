@@ -3,16 +3,16 @@ from src.phonemix import pronunciation_feedback
 from src.lang_validation import validate_language
 from src.suggetions.suggetions import suggetion_generate
 
+def validate_text_in_real_time(expected_text, language):
+    is_valid, validation_message = validate_language(expected_text, language)
+    if not is_valid:
+        return gr.Markdown(f"<span style='color: red;'>{validation_message}</span>")
+    return gr.Markdown("")
+
 with gr.Blocks() as demo:
 
     text_input = gr.State("")
     text_validate_boolean = gr.State(False)
-
-    def validate_text_in_real_time(expected_text, language):
-        is_valid, validation_message = validate_language(expected_text, language)
-        if not is_valid:
-            return gr.Markdown(f"<span style='color: red;'>{validation_message}</span>")
-        return gr.Markdown("")
 
     with gr.Row():
         native_language_input = gr.Dropdown(
@@ -42,17 +42,8 @@ with gr.Blocks() as demo:
     transcribed_text_output = gr.Textbox(label="You said this")
     user_phonemes_output = gr.Textbox(label="Your Phonemes")
     correct_phonemes_output = gr.Textbox(label="Correct Phonemes")
-    detailed_feedback_output = gr.Markdown(label="Detailed Feedback")
+    detailed_feedback_output = gr.Accordion(label="Feedback details")
     expected_audio_output = gr.Audio(label="Correct Audio", type="filepath")
-    
-    # Crear un accordion para el feedback detallado
-    with gr.Accordion("Detailed Feedback", open=False):
-        gr.Markdown("Here you can see the detailed feedback on your pronunciation.")
-        detailed_feedback_content = gr.Markdown(detailed_feedback_output)  # Contenido del accordion
-
-    #suggetions_text = suggetion_generate(textInput=text_input, language_output=language_input)
-
-    #print(suggetions_text)
 
     feedback_button.click(
         pronunciation_feedback,
