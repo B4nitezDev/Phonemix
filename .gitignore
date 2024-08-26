@@ -2,3 +2,4 @@ phonemix.pem
 phonemix-venv
 __pycache__
 .env
+venv
