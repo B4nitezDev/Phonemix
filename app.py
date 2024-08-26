@@ -6,8 +6,8 @@ from src.suggestions.suggestions import suggestion_generate
 def validate_text_in_real_time(expected_text, language):
     is_valid, validation_message = validate_language(expected_text, language)
     if not is_valid:
-        return f"<div style='color: red; height: 20px;'>{validation_message}</div>"
-    return "<div style='height: 20px;'></div>"
+        return f"<div style='color: red; height: 20px; max-height: 20px; overflow: hidden;'>{validation_message}</div>"
+    return "<div style='height: 20px; max-height: 20px; overflow: hidden;'></div>"
 
 def get_feedback(language, text, audio):
     transcribed_text, user_phonemes, correct_phonemes, detailed_feedback, expected_audio = pronunciation_feedback(language, text, audio)
@@ -32,9 +32,8 @@ with gr.Blocks() as demo:
         )
 
         with gr.Column():
-            validation_message_output = gr.Markdown("<div style='height: 20px;'></div>")
             text_input = gr.Textbox(label="What do you want to say?", max_lines=2)
-            
+            validation_message_output = gr.Markdown("<div style='height: 20px; max-height: 20px; overflow: hidden;'></div>")
         
         audio_input = gr.Audio(label="Speak out loud", type="filepath")
 
