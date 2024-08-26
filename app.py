@@ -56,8 +56,9 @@ with gr.Blocks() as demo:
             detailed_feedback_output = gr.Markdown()  # Colocamos Markdown aquí
     expected_audio_output = gr.Audio(label="Correct Audio", type="filepath")
     
-    with gr.Row():
-        suggestions_output = gr.Markdown(label="Suggestions", placeholder="Suggestions will appear here...")
+    with gr.Column():
+        gr.Markdown("## Suggestions")
+        suggestions_output = gr.Markdown(label="Suggestions")
 
     feedback_button.click(
         get_feedback,
