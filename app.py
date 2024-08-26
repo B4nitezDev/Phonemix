@@ -33,8 +33,10 @@ with gr.Blocks() as demo:
         )
 
         with gr.Column():
-            text_input = gr.Textbox(label="What do you want to say?")
-            validation_message_output = gr.Markdown("")
+            with gr.Row():
+                text_input = gr.Textbox(label="What do you want to say?")
+            with gr.Row():
+                validation_message_output = gr.Markdown("")
         
         audio_input = gr.Audio(label="Speak out loud", type="filepath")
 
