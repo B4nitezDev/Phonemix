@@ -42,6 +42,7 @@ with gr.Blocks() as demo:
     transcribed_text_output = gr.Textbox(label="You said this")
     user_phonemes_output = gr.Textbox(label="Your Phonemes")
     correct_phonemes_output = gr.Textbox(label="Correct Phonemes")
+    detailed_feedback_output = gr.Markdown(label="Detailed Feedback")
     expected_audio_output = gr.Audio(label="Correct Audio", type="filepath")
 
     #suggetions_text = suggetion_generate(textInput=text_input, language_output=language_input)
@@ -55,6 +56,7 @@ with gr.Blocks() as demo:
             transcribed_text_output,
             user_phonemes_output, 
             correct_phonemes_output, 
+            detailed_feedback_output,
             expected_audio_output
         ]
     )
