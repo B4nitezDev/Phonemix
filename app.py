@@ -58,8 +58,7 @@ with gr.Blocks() as demo:
     
     with gr.Column():
         gr.Markdown("## Suggestions")
-        with gr.Box():  # Aquí se ajusta el tamaño del contenedor
-            suggestions_output = gr.Markdown()
+        suggestions_output = gr.Markdown(label="Suggestions")
 
     feedback_button.click(
         get_feedback,
