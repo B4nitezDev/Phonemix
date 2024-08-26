@@ -14,6 +14,10 @@ def get_feedback(language, text, audio):
     transcribed_text, user_phonemes, correct_phonemes, detailed_feedback, expected_audio = pronunciation_feedback(language, text, audio)
     return transcribed_text, user_phonemes, correct_phonemes, detailed_feedback, expected_audio
 
+def get_suggestions(text, language):
+    # Obtiene las sugerencias
+    return suggetion_generate(text, language)
+
 with gr.Blocks() as demo:
     with gr.Row():
         gr.Markdown("# Phonemix: Pronunciation Feedback Tool")
@@ -45,14 +49,18 @@ with gr.Blocks() as demo:
     )
     
     feedback_button = gr.Button("Get Feedback")
+    suggestions_button = gr.Button("Get Suggestions")
     
     transcribed_text_output = gr.Textbox(label="You said this")
     user_phonemes_output = gr.Textbox(label="Your Phonemes")
     correct_phonemes_output = gr.Textbox(label="Correct Phonemes")
+    
     with gr.Row():
         with gr.Accordion(label="Show detailed feedback"):
             detailed_feedback_output = gr.Markdown()  # Colocamos Markdown aquí
     expected_audio_output = gr.Audio(label="Correct Audio", type="filepath")
+    
+    suggestions_output = gr.Textbox(label="Suggestions", placeholder="Suggestions will appear here...")
 
     feedback_button.click(
         get_feedback,
@@ -64,6 +72,12 @@ with gr.Blocks() as demo:
             detailed_feedback_output,
             expected_audio_output
         ]
+    )
+
+    suggestions_button.click(
+        get_suggestions,
+        inputs=[text_input, language_input],
+        outputs=[suggestions_output]
     )
 
 demo.launch(server_name="0.0.0.0", server_port=7860)
