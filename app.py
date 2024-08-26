@@ -32,8 +32,9 @@ with gr.Blocks() as demo:
         )
 
         with gr.Column():
-            text_input = gr.Textbox(label="What do you want to say?", max_lines=2)
-            validation_message_output = gr.Markdown("<div style='height: 20px;'></div>")
+            with gr.Box():
+                text_input = gr.Textbox(label="What do you want to say?", max_lines=2)
+                validation_message_output = gr.Markdown("<div style='height: 20px;'></div>")
         
         audio_input = gr.Audio(label="Speak out loud", type="filepath")
 
