@@ -10,3 +10,5 @@ pydub
 langdetect
 setuptools
 gradio
+python-dotenv
+google-generativeai
