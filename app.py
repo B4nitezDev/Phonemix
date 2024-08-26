@@ -15,7 +15,9 @@ def get_feedback(language, text, audio):
     return transcribed_text, user_phonemes, correct_phonemes, detailed_feedback, expected_audio
 
 with gr.Blocks() as demo:
-
+    with gr.Row():
+        gr.Markdown("# Phonemix: Pronunciation Feedback Tool")
+        
     text_input = gr.State("")
     text_validate_boolean = gr.State(False)
 
