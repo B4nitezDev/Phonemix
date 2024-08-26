@@ -11,14 +11,11 @@ genai.configure(api_key=api_key)
 model = genai.GenerativeModel('gemini-1.5-flash')
 
 def suggetion_generate(textInput, language_output):
-    response = model.generate_content("Give me 2 translations, one formal and one informal, of the following text" +
+    response = model.generate_content("Give me 2 translations, one formal and one informal, of the following text: " +
                                     textInput +
-                                    "in this language" +
-                                    language_output+                                     
-                                    "and just return the translation"
+                                    ". in this language" +
+                                    language_output +                                     
+                                    " and just return the translation"
                                   )
     
     return response.text
-
-
-print(suggetion_generate("Hola como estas", "es"))
