@@ -67,4 +67,4 @@ with gr.Blocks() as demo:
         with gr.Accordion("Show Feedback"):
             detailed_feedback_output  # Colocamos Markdown aquí
 
-demo.launch(server_name="0.0.0.0", server_port=7860)
+demo.launch(server_name="0.0.0.0", server_port=8000)
