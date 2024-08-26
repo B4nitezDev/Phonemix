@@ -40,6 +40,7 @@ def pronunciation_feedback(language, expected_text, file_path):
             transcribed_text, 
             user_phonemes, 
             correct_phonemes, 
+            feedback,
             expected_audio_file
         )
 
