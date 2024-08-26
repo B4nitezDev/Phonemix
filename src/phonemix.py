@@ -24,6 +24,11 @@ def pronunciation_feedback(language, expected_text, file_path):
         transcribed_text = transcribe_audio(file_path, language)
         user_phonemes = get_phonemes(transcribed_text, language)
 
+        # Generar el audio esperado como un archivo
+        expected_audio_stream = text_to_speech(expected_text, language)
+        expected_audio = AudioSegment.from_file(expected_audio_stream)
+        expected_audio_file = "/tmp/expected_audio.wav"
+        expected_audio.export(expected_audio_file, format="wav")
 
         # Obtener los fonemas correctos
         correct_phonemes = get_phonemes(expected_text, language)
@@ -35,6 +40,7 @@ def pronunciation_feedback(language, expected_text, file_path):
             transcribed_text, 
             user_phonemes, 
             correct_phonemes, 
+            expected_audio_file
         )
 
     except ValueError as e:
