@@ -47,7 +47,10 @@ with gr.Blocks() as demo:
     transcribed_text_output = gr.Textbox(label="You said this")
     user_phonemes_output = gr.Textbox(label="Your Phonemes")
     correct_phonemes_output = gr.Textbox(label="Correct Phonemes")
-    detailed_feedback_output = gr.Markdown()  # Utilizamos Markdown para el feedback detallado
+    with gr.Row():
+        gr.Markdown("### Feedback Details")
+        with gr.Accordion("Show Feedback"):
+            detailed_feedback_output = gr.Markdown()  # Colocamos Markdown aquí
     expected_audio_output = gr.Audio(label="Correct Audio", type="filepath")
 
     feedback_button.click(
@@ -61,10 +64,5 @@ with gr.Blocks() as demo:
             expected_audio_output
         ]
     )
-
-    with gr.Row():
-        gr.Markdown("### Feedback Details")
-        with gr.Accordion("Show Feedback"):
-            detailed_feedback_output  # Colocamos Markdown aquí
 
 demo.launch(server_name="0.0.0.0", server_port=7860)
