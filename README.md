@@ -1,1 +1,1 @@
-Welcome to Phonemix, the Pronunciation Feedback API.
+Welcome to Phonemix, the Pronunciation Feedback Tool.
