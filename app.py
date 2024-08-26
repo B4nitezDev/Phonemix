@@ -1,13 +1,9 @@
 import gradio as gr
 from src.phonemix import pronunciation_feedback
 from src.lang_validation import validate_language
+from src.suggetions.suggetions import suggetion_generate
 
-
-# Crear la interfaz de Gradio
 with gr.Blocks() as demo:
-    with gr.Row():
-        gr.Image("static/logo.jpg", elem_id="logo", width=50, height=50)  # Agrega el logo
-        gr.Markdown("# Phonemix: Pronunciation Feedback Tool")  # Agrega el título
 
     text_input = gr.State("")
     text_validate_boolean = gr.State(False)
@@ -48,6 +44,9 @@ with gr.Blocks() as demo:
     correct_phonemes_output = gr.Textbox(label="Correct Phonemes")
     expected_audio_output = gr.Audio(label="Correct Audio", type="filepath")
 
+    #suggetions_text = suggetion_generate(textInput=text_input, language_output=language_input)
+
+    #print(suggetions_text)
 
     feedback_button.click(
         pronunciation_feedback,
