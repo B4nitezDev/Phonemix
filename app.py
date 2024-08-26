@@ -50,7 +50,7 @@ with gr.Blocks() as demo:
     user_phonemes_output = gr.Textbox(label="Your Phonemes")
     correct_phonemes_output = gr.Textbox(label="Correct Phonemes")
     with gr.Row():
-        with gr.Accordion("Show detailed feedback"):
+        with gr.Accordion(label="Show detailed feedback"):
             detailed_feedback_output = gr.Markdown()  # Colocamos Markdown aquí
     expected_audio_output = gr.Audio(label="Correct Audio", type="filepath")
 
