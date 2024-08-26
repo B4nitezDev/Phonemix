@@ -1,7 +1,8 @@
 * Dockerizar app
 * deploy en railway o algo que agregue ssl.
-* Agregar github action para que auto deploye imagen docker
+* Agregar github action para que auto deploye imagen docker.
 * refactorizar codigo en app.py.
+- Arreglar el manejo de files.
 - arreglar estilos.
 - agregar feedback detallado.
 - agregar sugerencias con gemini.
