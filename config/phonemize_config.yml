@@ -52,6 +52,17 @@ lang_validation:
     - pt-pt
     - pt-br
 
+lang_choices:
+  - es 
+  - es-la
+  - en-us
+  - en-gb
+  - pt-pt
+  - pt-br
+  - fr-fr
+  - it
+  - de
+
 
   
 unknownvalueerror: Google Speech Recognition could not understand audio
