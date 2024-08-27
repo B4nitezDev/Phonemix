@@ -6,8 +6,8 @@ from src.suggestions.suggestions import suggestion_generate
 def validate_text_in_real_time(expected_text, language):
     is_valid, validation_message = validate_language(expected_text, language)
     if not is_valid:
-        return gr.Markdown(f"<span style='color: red;'>{validation_message}</span>")
-    return gr.Markdown("")
+        return f"<div style='color: red; min-height: 20px; max-height: 21px; '>{validation_message}</div>"
+    return "<div style='min-height: 20px; max-height: 21px; max-width:60px; '>&nbsp;</div>"
 
 def get_feedback(language, text, audio):
     # Obtiene el feedback detallado como un texto
@@ -22,7 +22,7 @@ with gr.Blocks() as demo:
     text_input = gr.State("")
     text_validate_boolean = gr.State(False)
 
-    with gr.Row():
+    with gr.Row(elem_id="input_row"):
         native_language_input = gr.Dropdown(
             label="Your native language", 
             choices=["es", "es-la", "pt-pt", "pt-br", "de", "it", "fr-fr", "en-gb", "en-us"]
@@ -34,9 +34,9 @@ with gr.Blocks() as demo:
 
         with gr.Column():
             text_input = gr.Textbox(label="What do you want to say?", max_lines=2)
-            validation_message_output = gr.Markdown("")
+            validation_message_output = gr.HTML("<div style='min-height:20px; max-height:21px;'>&nbsp;</div>") 
         
-        audio_input = gr.Audio(label="Speak out loud", type="filepath")
+        audio_input = gr.Audio(label="Speak out loud", type="filepath", elem_id="audio_input")
 
     text_input.change(
         validate_text_in_real_time, 
@@ -53,7 +53,7 @@ with gr.Blocks() as demo:
     
     with gr.Row():
         with gr.Accordion(label="Show detailed feedback"):
-            detailed_feedback_output = gr.Markdown()  # Colocamos Markdown aquí
+            detailed_feedback_output = gr.Markdown()
     expected_audio_output = gr.Audio(label="Correct Audio", type="filepath")
     
     with gr.Column():
@@ -72,5 +72,16 @@ with gr.Blocks() as demo:
             suggestions_output
         ]
     )
+
+demo.css = """
+#audio_input {
+    max-height: 400px; /* Ajusta el tamaño del componente de audio para mantener estabilidad */
+}
+
+#input_row {
+    height: 290px; /* Ajusta este valor según tus necesidades */
+    overflow-y: auto; /* Permite el desplazamiento si el contenido es demasiado largo */
+}
+"""
 
 demo.launch(server_name="0.0.0.0", server_port=7860)
