@@ -6,8 +6,8 @@ from src.suggestions.suggestions import suggestion_generate
 def validate_text_in_real_time(expected_text, language):
     is_valid, validation_message = validate_language(expected_text, language)
     if not is_valid:
-        return f"<div style='color: red; height: 20px; max-height: 20px; overflow: hidden;'>{validation_message}</div>"
-    return "<div style='height: 20px; max-height: 20px; overflow: hidden;'></div>"
+        return f"{expected_text}\n\n**Validation Error:** {validation_message}"
+    return expected_text
 
 def get_feedback(language, text, audio):
     transcribed_text, user_phonemes, correct_phonemes, detailed_feedback, expected_audio = pronunciation_feedback(language, text, audio)
@@ -17,7 +17,7 @@ def get_feedback(language, text, audio):
 with gr.Blocks() as demo:
     with gr.Row():
         gr.Markdown("# Phonemix: Pronunciation Feedback Tool")
-        
+
     text_input = gr.State("")
     text_validate_boolean = gr.State(False)
 
@@ -31,16 +31,14 @@ with gr.Blocks() as demo:
             choices=["es", "es-la", "pt-pt", "pt-br", "de", "it", "fr-fr", "en-gb", "en-us"]
         )
 
-        with gr.Column():
-            text_input = gr.Textbox(label="What do you want to say?", max_lines=2)
-            validation_message_output = gr.Markdown("<div style='height: 20px; max-height: 20px; overflow: hidden;'></div>")
-        
+        text_input = gr.Textbox(label="What do you want to say?", max_lines=4)
+
         audio_input = gr.Audio(label="Speak out loud", type="filepath")
 
     text_input.change(
         validate_text_in_real_time, 
         inputs=[text_input, language_input], 
-        outputs=validation_message_output,
+        outputs=text_input,
         every=2  # Valida cada 2 segundos
     )
     
