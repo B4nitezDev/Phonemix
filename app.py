@@ -6,8 +6,8 @@ from src.suggestions.suggestions import suggestion_generate
 def validate_text_in_real_time(expected_text, language):
     is_valid, validation_message = validate_language(expected_text, language)
     if not is_valid:
-        return f"<div style='color: red; height: 20px; line-height: 20px; overflow: hidden;'>{validation_message}</div>"
-    return "<div style='height: 20px; line-height: 20px; overflow: hidden;'></div>"
+        return f"<div style='color: red; min-height: 20px; max-height: 21px; '>{validation_message}</div>"
+    return "<div style='min-height: 20px; max-height: 21px; max-width:60px; '>&nbsp;</div>"
 
 def get_feedback(language, text, audio):
     transcribed_text, user_phonemes, correct_phonemes, detailed_feedback, expected_audio = pronunciation_feedback(language, text, audio)
@@ -21,7 +21,7 @@ with gr.Blocks() as demo:
     text_input = gr.State("")
     text_validate_boolean = gr.State(False)
 
-    with gr.Row():
+    with gr.Row(elem_id="input_row"):
         native_language_input = gr.Dropdown(
             label="Your native language", 
             choices=["es", "es-la", "pt-pt", "pt-br", "de", "it", "fr-fr", "en-gb", "en-us"]
@@ -33,9 +33,9 @@ with gr.Blocks() as demo:
 
         with gr.Column():
             text_input = gr.Textbox(label="What do you want to say?", max_lines=2)
-            validation_message_output = gr.HTML("<div style='height: 20px; line-height: 20px; overflow: hidden;'></div>")
+            validation_message_output = gr.HTML("<div style='min-height:20px; max-height:21px;'>&nbsp;</div>") 
         
-        audio_input = gr.Audio(label="Speak out loud", type="filepath")
+        audio_input = gr.Audio(label="Speak out loud", type="filepath", elem_id="audio_input")
 
     text_input.change(
         validate_text_in_real_time, 
@@ -71,5 +71,16 @@ with gr.Blocks() as demo:
             suggestions_output
         ]
     )
+
+demo.css = """
+#audio_input {
+    max-height: 400px; /* Ajusta el tamaño del componente de audio para mantener estabilidad */
+}
+
+#input_row {
+    height: 290px; /* Ajusta este valor según tus necesidades */
+    overflow-y: auto; /* Permite el desplazamiento si el contenido es demasiado largo */
+}
+"""
 
 demo.launch(server_name="0.0.0.0", server_port=7860)
