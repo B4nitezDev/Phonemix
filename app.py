@@ -7,8 +7,8 @@ from config.config import phonemize_config
 def validate_text_in_real_time(expected_text, language):
     is_valid, validation_message = validate_language(expected_text, language)
     if not is_valid:
-        return f"<div style='color: red; min-height: 20px; max-height: 21px; '>{validation_message}</div>"
-    return "<div style='min-height: 20px; max-height: 21px; max-width:60px; '>&nbsp;</div>"
+        return f"<div style='color: red; min-height: 20px; max-height: 21px;'>{validation_message}</div>"
+    return "<div style='min-height: 20px; max-height: 21px; max-width:60px;'>&nbsp;</div>"
 
 def get_feedback(language, text, audio):
     # Obtiene el feedback detallado como un texto
@@ -18,7 +18,7 @@ def get_feedback(language, text, audio):
 
 with gr.Blocks() as demo:
     with gr.Row():
-        gr.Markdown("# Phonemix: Pronunciation Feedback Tool")
+        gr.Markdown("# 🌍 Phonemix: Pronunciation Feedback Tool")
         
     text_input = gr.State("")
     text_validate_boolean = gr.State(False)
