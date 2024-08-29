@@ -1,0 +1,43 @@
+name: api build and push
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Paso 1: Checkout del código del repositorio
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Paso 2: Configurar Docker para que use tu nombre de usuario y token
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+
+      # Paso 3: Obtener hash de versionado
+      - name: Set image tag
+        id: vars
+        run: |
+          if [ "${{ github.ref }}" == "refs/heads/main" ]; then
+            echo "TAG=latest" >> $GITHUB_ENV
+          else
+            echo "TAG=${GITHUB_SHA::7}" >> $GITHUB_ENV
+          fi
+
+      # Paso 4: Construir la imagen
+      - name: Build the Docker image
+        run: docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/phonemix-api:${{ env.TAG }} -f ./.container/api.dockerfile .
+
+      # Paso 5: Publicar la imagen a Docker Hub
+      - name: Push the Docker image
+        run: docker push ${{ secrets.DOCKER_HUB_USERNAME }}/phonemix-api:${{ env.TAG }}
