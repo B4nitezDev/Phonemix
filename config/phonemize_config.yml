@@ -7,24 +7,24 @@ default_tld: com
 backend: espeak
 
 language_map_sr: 
-  en-us: en-US
-  en-gb: en-GB
-  fr-fr: fr-FR
-  it: it-IT
-  de: de-DE
-  pt-pt: pt-PT
-  pt-br: pt-BR
-  es: es-ES
-  es-la: es-AR
-
-language_map_t2s:
-  en-us: en-us
-  en-gb: en-uk
-  fr-fr: fr
-  it: it
   de: de
+  it: it
+  fr-fr: fr
   pt-pt: pt
   pt-br: pt-br
+  en-us: en-us
+  en-gb: en-uk
+  es: es
+  es-la: es-ar
+
+language_map_t2s:
+  de: de
+  it: it
+  fr-fr: fr
+  pt-pt: pt
+  pt-br: pt-br
+  en-us: en-us
+  en-gb: en-uk
   es: es
   es-la: es-ar
 
@@ -51,6 +51,17 @@ lang_validation:
   pt: 
     - pt-pt
     - pt-br
+
+lang_choices:
+  - es 
+  - es-la
+  - en-us
+  - en-gb
+  - pt-pt
+  - pt-br
+  - fr-fr
+  - it
+  - de
 
 
   

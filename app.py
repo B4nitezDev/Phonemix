@@ -2,12 +2,13 @@ import gradio as gr
 from src.phonemix import pronunciation_feedback
 from src.lang_validation import validate_language
 from src.suggestions.suggestions import suggestion_generate
+from config.config import phonemize_config
 
 def validate_text_in_real_time(expected_text, language):
     is_valid, validation_message = validate_language(expected_text, language)
     if not is_valid:
-        return f"<div style='color: red; min-height: 20px; max-height: 21px; '>{validation_message}</div>"
-    return "<div style='min-height: 20px; max-height: 21px; max-width:60px; '>&nbsp;</div>"
+        return f"<div style='color: red; min-height: 20px; max-height: 21px;'>{validation_message}</div>"
+    return "<div style='min-height: 20px; max-height: 21px; max-width:60px;'>&nbsp;</div>"
 
 def get_feedback(language, text, audio):
     transcribed_text, user_phonemes, correct_phonemes, detailed_feedback, expected_audio = pronunciation_feedback(language, text, audio)
@@ -16,7 +17,7 @@ def get_feedback(language, text, audio):
 
 with gr.Blocks() as demo:
     with gr.Row():
-        gr.Markdown("# Phonemix: Pronunciation Feedback Tool")
+        gr.Markdown("# 🌍 Phonemix: Pronunciation Feedback Tool")
         
     text_input = gr.State("")
     text_validate_boolean = gr.State(False)
@@ -24,11 +25,11 @@ with gr.Blocks() as demo:
     with gr.Row(elem_id="input_row"):
         native_language_input = gr.Dropdown(
             label="Your native language", 
-            choices=["es", "es-la", "pt-pt", "pt-br", "de", "it", "fr-fr", "en-gb", "en-us"]
+            choices=phonemize_config['lang_choices']
         )
         language_input = gr.Dropdown(
             label="What language do you want to speak?", 
-            choices=["es", "es-la", "pt-pt", "pt-br", "de", "it", "fr-fr", "en-gb", "en-us"]
+            choices=phonemize_config['lang_choices']
         )
 
         with gr.Column():
