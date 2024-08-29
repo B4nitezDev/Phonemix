@@ -13,3 +13,4 @@ langdetect
 setuptools
 python-dotenv
 google-generativeai
+python-multipart
