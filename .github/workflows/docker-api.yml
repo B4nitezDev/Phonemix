@@ -36,7 +36,7 @@ jobs:
 
       # Paso 4: Construir la imagen
       - name: Build the Docker image
-        run: docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/phonemix-api:${{ env.TAG }} ./.container/api.dockerfile
+        run: docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/phonemix-api:${{ env.TAG }} -f ./.container/api.dockerfile .
 
       # Paso 5: Publicar la imagen a Docker Hub
       - name: Push the Docker image

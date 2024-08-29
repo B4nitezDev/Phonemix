@@ -36,7 +36,7 @@ jobs:
 
       # Paso 4: Construir la imagen
       - name: Build the Docker image
-        run: docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/phonemix:${{ env.TAG }} ./.container/gradio.dockerfile
+        run: docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/phonemix:${{ env.TAG }} -f ./.container/gradio.dockerfile .
 
       # Paso 5: Publicar la imagen a Docker Hub
       - name: Push the Docker image
