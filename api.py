@@ -16,7 +16,7 @@ class FeedbackRequest(BaseModel):
     language: str
     text: str
 
-@app.post("/")
+@app.get("/")
 async def home():
     return {"message": "Welcome to Phonemix API"}
 
