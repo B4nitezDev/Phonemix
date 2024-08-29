@@ -11,7 +11,6 @@ def validate_text_in_real_time(expected_text, language):
     return "<div style='min-height: 20px; max-height: 21px; max-width:60px;'>&nbsp;</div>"
 
 def get_feedback(language, text, audio):
-    # Obtiene el feedback detallado como un texto
     transcribed_text, user_phonemes, correct_phonemes, detailed_feedback, expected_audio = pronunciation_feedback(language, text, audio)
     suggestions = suggestion_generate(text, language)
     return transcribed_text, user_phonemes, correct_phonemes, detailed_feedback, expected_audio, suggestions

@@ -1,6 +1,6 @@
 FROM python:3.12-slim
 
-WORKDIR /app
+WORKDIR /gradio
 
 COPY requirements.txt .
 
@@ -15,4 +15,4 @@ COPY . .
 
 EXPOSE 7860
 
-CMD ["python", "app.py"] 
+CMD ["python", "gradio.py"] 
