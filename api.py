@@ -12,10 +12,6 @@ class ValidationRequest(BaseModel):
     expected_text: str
     language: str
 
-class FeedbackRequest(BaseModel):
-    language: str
-    text: str
-
 @app.get("/")
 async def home():
     return {"message": "Welcome to Phonemix API"}
@@ -28,7 +24,7 @@ async def lang_validation(request: ValidationRequest):
     return {"validation_message": ""}
 
 @app.post("/get_feedback")
-async def get_feedback(request: FeedbackRequest = Form(...), audio: UploadFile = File(...)):
+async def get_feedback(language: str = Form(...), text: str = Form(...), audio: UploadFile = File(...)):
     try:
         # Guarda temporalmente el archivo de audio
         audio_file_path = f"/tmp/{audio.filename}"
@@ -37,9 +33,9 @@ async def get_feedback(request: FeedbackRequest = Form(...), audio: UploadFile =
         
         # Obtén el feedback detallado
         transcribed_text, user_phonemes, correct_phonemes, detailed_feedback, expected_audio = pronunciation_feedback(
-            request.language, request.text, audio_file_path
+            language, text, audio_file_path
         )
-        suggestions = suggestion_generate(request.text, request.language)
+        suggestions = suggestion_generate(text, language)
         
         return {
             "transcribed_text": transcribed_text,
