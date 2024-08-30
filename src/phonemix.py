@@ -39,9 +39,6 @@ def pronunciation_feedback(language, expected_text, file_path):
         # Codificar el buffer en base64
         expected_audio_base64 = base64.b64encode(expected_audio_data).decode('utf-8')
 
-        # Log para verificar si se codificó correctamente
-        print("Base64 audio length:", len(expected_audio_base64))
-
         # Obtener los fonemas correctos
         correct_phonemes = get_phonemes(expected_text, language)
 
