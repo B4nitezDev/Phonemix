@@ -33,8 +33,14 @@ def pronunciation_feedback(language, expected_text, file_path):
         expected_audio.export(expected_audio_buffer, format="wav")
         expected_audio_buffer.seek(0)  # Resetea el puntero del buffer al inicio
 
+        # Leer el contenido del buffer para codificarlo en base64
+        expected_audio_data = expected_audio_buffer.read()
+
         # Codificar el buffer en base64
-        expected_audio_base64 = base64.b64encode(expected_audio_buffer.read()).decode('utf-8')
+        expected_audio_base64 = base64.b64encode(expected_audio_data).decode('utf-8')
+
+        # Log para verificar si se codificó correctamente
+        print("Base64 audio length:", len(expected_audio_base64))
 
         # Obtener los fonemas correctos
         correct_phonemes = get_phonemes(expected_text, language)
@@ -55,3 +61,4 @@ def pronunciation_feedback(language, expected_text, file_path):
     except Exception as e:
         print(f"Error: {e}")
         return "An unexpected error occurred.", None, None, None, None
+
