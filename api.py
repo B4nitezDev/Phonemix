@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException, UploadFile, File, Form
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from src.phonemix import pronunciation_feedback
 from src.lang_validation import validate_language
@@ -7,6 +8,15 @@ from config.config import phonemize_config
 import uvicorn
 
 app = FastAPI()
+
+# Configurar el middleware de CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Permite todas las fuentes. Puedes restringir esto a dominios específicos.
+    allow_credentials=True,
+    allow_methods=["*"],  # Permite todos los métodos (GET, POST, etc.). Puedes restringirlo si es necesario.
+    allow_headers=["*"],  # Permite todos los encabezados. Puedes restringirlo si es necesario.
+)
 
 class ValidationRequest(BaseModel):
     expected_text: str
