@@ -40,4 +40,4 @@ jobs:
 
       # Paso 5: Publicar la imagen a Docker Hub
       - name: Push the Docker image
-        run: docker push ${{ secrets.DOCKER_HUB_USERNAME }}api-phonemix:${{ env.TAG }}
+        run: docker push ${{ secrets.DOCKER_HUB_USERNAME }}/api-phonemix:${{ env.TAG }}
