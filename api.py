@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, UploadFile, File
+from fastapi import FastAPI, HTTPException, UploadFile, File, Form
 from pydantic import BaseModel
 from src.phonemix import pronunciation_feedback
 from src.lang_validation import validate_language
@@ -28,7 +28,7 @@ async def lang_validation(request: ValidationRequest):
     return {"validation_message": ""}
 
 @app.post("/get_feedback")
-async def get_feedback(request: FeedbackRequest, audio: UploadFile = File(...)):
+async def get_feedback(request: FeedbackRequest = Form(...), audio: UploadFile = File(...)):
     try:
         # Guarda temporalmente el archivo de audio
         audio_file_path = f"/tmp/{audio.filename}"
