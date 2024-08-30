@@ -32,7 +32,7 @@ async def get_feedback(language: str = Form(...), text: str = Form(...), audio: 
             audio_file.write(await audio.read())
         
         # Obtén el feedback detallado
-        transcribed_text, user_phonemes, correct_phonemes, detailed_feedback, expected_audio = pronunciation_feedback(
+        transcribed_text, user_phonemes, correct_phonemes, detailed_feedback, audio_base64 = pronunciation_feedback(
             language, text, audio_file_path
         )
         suggestions = suggestion_generate(text, language)
@@ -42,11 +42,12 @@ async def get_feedback(language: str = Form(...), text: str = Form(...), audio: 
             "user_phonemes": user_phonemes,
             "correct_phonemes": correct_phonemes,
             "detailed_feedback": detailed_feedback,
-            "expected_audio": expected_audio,
+            "expected_audio": audio_base64,
             "suggestions": suggestions
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
     
 @app.get("/supported_languages")
 async def supported_languages():

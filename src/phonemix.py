@@ -3,7 +3,8 @@ from .phonemize.transcriber import transcribe_audio
 from .t2s.t2s import text_to_speech
 from .phonemize.analyzer import get_phonemes
 from pydub import AudioSegment
-import os
+import io
+import base64
 
 def provide_detailed_feedback(user_phonemes, correct_phonemes):
     """ Generate detailed feedback for phoneme corrections. """
@@ -17,18 +18,23 @@ def provide_detailed_feedback(user_phonemes, correct_phonemes):
     ]
     return "\n".join(feedback_lines)
 
-
 def pronunciation_feedback(language, expected_text, file_path):
     try:
         # Transcribir el archivo de audio y obtener fonemas
         transcribed_text = transcribe_audio(file_path, language)
         user_phonemes = get_phonemes(transcribed_text, language)
 
-        # Generar el audio esperado como un archivo
+        # Generar el audio esperado como un stream en memoria
         expected_audio_stream = text_to_speech(expected_text, language)
         expected_audio = AudioSegment.from_file(expected_audio_stream)
-        expected_audio_file = "/tmp/expected_audio.wav"
-        expected_audio.export(expected_audio_file, format="wav")
+        
+        # Crear un buffer en memoria para el audio
+        expected_audio_buffer = io.BytesIO()
+        expected_audio.export(expected_audio_buffer, format="wav")
+        expected_audio_buffer.seek(0)  # Resetea el puntero del buffer al inicio
+
+        # Codificar el buffer en base64
+        expected_audio_base64 = base64.b64encode(expected_audio_buffer.read()).decode('utf-8')
 
         # Obtener los fonemas correctos
         correct_phonemes = get_phonemes(expected_text, language)
@@ -41,11 +47,11 @@ def pronunciation_feedback(language, expected_text, file_path):
             user_phonemes, 
             correct_phonemes, 
             feedback,
-            expected_audio_file
+            expected_audio_base64
         )
 
     except ValueError as e:
-        return str(e), None, None, None, None, None
+        return str(e), None, None, None, None
     except Exception as e:
         print(f"Error: {e}")
-        return "An unexpected error occurred.", None, None, None, None, None
+        return "An unexpected error occurred.", None, None, None, None
