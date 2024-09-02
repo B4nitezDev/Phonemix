@@ -7,7 +7,7 @@ PyYAML
 gtts
 pydub
 # sudo apt-get install ffmpeg
-langdetect
+py3langid
 setuptools
 gradio
 python-dotenv

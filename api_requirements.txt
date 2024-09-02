@@ -9,7 +9,7 @@ PyYAML
 gtts
 pydub
 # sudo apt-get install ffmpeg
-langdetect
+py3langid
 setuptools
 python-dotenv
 google-generativeai

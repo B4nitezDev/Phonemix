@@ -1,11 +1,16 @@
-from langdetect import detect, LangDetectException
+from py3langid.langid import LanguageIdentifier, MODEL_FILE
 from config.config import phonemize_config
+
+# Inicializa el identificador de idioma
+identifier = LanguageIdentifier.from_pickled_model(MODEL_FILE, norm_probs=True)
+identifier.set_languages(list(phonemize_config['lang_validation'].keys()))
 
 def validate_language(text, expected_language):
     try:
-        detected_language = detect(text)
-    except LangDetectException:
-        return False, "Could not detect the language of the text."
+        # Usa el identificador para clasificar el texto
+        detected_language, _ = identifier.classify(text)
+    except Exception as e:
+        return False, f"Could not detect the language of the text. Error: {e}"
     
     languages = phonemize_config['lang_validation']
     
