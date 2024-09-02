@@ -7,26 +7,26 @@ default_tld: com
 backend: espeak
 
 language_map_sr: 
-  de: de
-  it: it
-  fr-fr: fr
-  pt-pt: pt
-  pt-br: pt-br
-  en-us: en-us
-  en-gb: en-uk
-  es: es
-  es-la: es-ar
+  es-la: es-AR
+  es: es-ES
+  en-us: en-US
+  en-gb: en-GB
+  pt-br: pt-BR
+  pt-pt: pt-PT
+  fr-fr: fr-FR
+  it: it-IT
+  de: de-DE
 
 language_map_t2s:
-  de: de
-  it: it
-  fr-fr: fr
-  pt-pt: pt
-  pt-br: pt-br
+  es-la: es-ar
+  es: es
   en-us: en-us
   en-gb: en-uk
-  es: es
-  es-la: es-ar
+  pt-br: pt-br
+  pt-pt: pt
+  fr-fr: fr
+  it: it
+  de: de
 
 tld_map_t2s:
   br: com.br # brasil (pt)
@@ -51,18 +51,6 @@ lang_validation:
   pt: 
     - pt-pt
     - pt-br
-
-lang_choices:
-  - es 
-  - es-la
-  - en-us
-  - en-gb
-  - pt-pt
-  - pt-br
-  - fr-fr
-  - it
-  - de
-
 
   
 unknownvalueerror: Google Speech Recognition could not understand audio

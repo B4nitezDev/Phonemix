@@ -62,7 +62,7 @@ async def get_feedback(language: str = Form(...), text: str = Form(...), audio: 
 @app.get("/supported_languages")
 async def supported_languages():
     try:
-        lang_choices = phonemize_config['lang_choices']
+        lang_choices = list(phonemize_config['language_map_sr'].keys())
         return lang_choices
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
