@@ -4,7 +4,7 @@ WORKDIR /api
 
 COPY api_requirements.txt .
 
-RUN pip install --no-cache-dir -r ../api_requirements.txt
+RUN pip install --no-cache-dir -r api_requirements.txt
 
 RUN apt-get update && apt-get install -y ffmpeg espeak
 
