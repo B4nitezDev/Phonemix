@@ -16,6 +16,8 @@ jobs:
       # Paso 1: Checkout del código del repositorio
       - name: Checkout code
         uses: actions/checkout@v2
+        with:
+          ref: dev
 
       # Paso 2: Configurar Docker para que use tu nombre de usuario y token
       - name: Log in to Docker Hub
