@@ -17,7 +17,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
         with:
-          ref: dev
+          ref: dev 
 
       # Paso 2: Configurar Docker para que use tu nombre de usuario y token
       - name: Log in to Docker Hub
@@ -38,7 +38,7 @@ jobs:
 
       # Paso 4: Construir la imagen
       - name: Build the Docker image
-        run: docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/api-phonemix:${{ env.TAG }} -f ./.container/api.dockerfile .
+        run: docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/api-phonemix:${{ env.TAG }} -f ./api.dockerfile .
 
       # Paso 5: Publicar la imagen a Docker Hub
       - name: Push the Docker image
