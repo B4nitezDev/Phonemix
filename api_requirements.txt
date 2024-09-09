@@ -14,3 +14,7 @@ setuptools
 python-dotenv
 google-generativeai
 python-multipart
+torch
+torchaudio
+openai
+transformers
