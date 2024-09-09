@@ -3,3 +3,4 @@ phonemix-venv
 __pycache__
 .env
 venv
+model-wav2vec2-accent-classification
