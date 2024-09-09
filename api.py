@@ -84,14 +84,15 @@ async def predict_accent(language: str = Form(...), text: str = Form(...), audio
         predicted_class_id = make_prediction(model, inputs, device)
         predicted_accent = get_predicted_accent(predicted_class_id, {0: 'us', 1: 'england'})
         
+        match = predicted_accent == language
         # Comparar el acento predicho con el acento esperado
-        if predicted_accent == language:
-            return {"message": "La pronunciación está bien!"}
+        if match:
+            return {'match': match}
         else:
             # Generar feedback sobre el acento si no coincide
             feedback_items = generate_accent_feedback(text, predicted_accent, language)
             return {
-                "predicted_accent": predicted_accent,
+                "match": match, 
                 "feedback_items": feedback_items
             }
     except Exception as e:
