@@ -4,3 +4,5 @@ __pycache__
 .env
 venv
 model-wav2vec2-accent-classification
+model-wav2vec2-accent-classificationV2
+model-wav2vec2-accent-classificationV3
