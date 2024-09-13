@@ -4,6 +4,7 @@ import speech_recognition as sr
 from config.config import phonemize_config
 from pydub import AudioSegment
 from pydub.effects import normalize
+from fastapi import HTTPException
 
 
 def convert_audio(input_file, output_file):
@@ -46,9 +47,9 @@ def transcribe_audio(audio_file, language=phonemize_config['default_language_sr'
             try:
                 return recognizer.recognize_google(audio_data, language=language)
             except sr.UnknownValueError:
-                raise ValueError("Error: Low volume audio detected. Please speak louder.")
+                raise HTTPException(status_code=400, detail="Error: Low volume audio detected. Please speak louder.")
             except sr.RequestError:
-                return phonemize_config['requesterror']
+                raise HTTPException(status_code=500, detail=phonemize_config['requesterror'])
     finally:
         # Clean up temporary file
         if os.path.exists(temp_file):

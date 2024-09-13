@@ -1,3 +1,4 @@
+from fastapi import HTTPException
 from src.phonemize.analyzer import levenshtein_detailed, print_phonemes_with_indices
 from .phonemize.transcriber import transcribe_audio
 from .t2s.t2s import text_to_speech
@@ -54,8 +55,6 @@ def pronunciation_feedback(language, expected_text, file_path):
         )
 
     except ValueError as e:
-        return str(e), None, None, None, None
+        raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
-        print(f"Error: {e}")
-        return "An unexpected error occurred.", None, None, None, None
-
+        raise HTTPException(status_code=500, detail="An unexpected error occurred.")
