@@ -44,13 +44,12 @@ def pronunciation_feedback(language, expected_text, file_path):
         correct_phonemes = get_phonemes(expected_text, language)
 
         # Generar retroalimentación
-        feedback = provide_detailed_feedback(user_phonemes, correct_phonemes)
+        # feedback = provide_detailed_feedback(user_phonemes, correct_phonemes)
         
         return (
             transcribed_text, 
             user_phonemes, 
             correct_phonemes, 
-            feedback,
             expected_audio_base64
         )
 
